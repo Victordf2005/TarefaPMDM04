@@ -192,11 +192,5 @@ public class FacerPedido extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Spinner spCat = findViewById(R.id.spnCategoria);
-        spCat.setSelection(0);
-    }
 
 }

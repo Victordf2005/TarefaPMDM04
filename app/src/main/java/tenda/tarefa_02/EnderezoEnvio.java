@@ -26,9 +26,13 @@ public class EnderezoEnvio extends AppCompatActivity {
                 String cpostal = ((EditText) findViewById(R.id.etCodPostal)).getText().toString().trim();
                 String cidade=((EditText) findViewById(R.id.etCidade)).getText().toString().trim();
 
+                // Só permitimos rematar o pedido cando complete todos os datos do enderezo
                 if (enderezo.equals("") || cpostal.equals("") || cidade.equals("")) {
+
                     Toast.makeText(getApplicationContext(), "Hai que completar todos os datos do enderezo.",Toast.LENGTH_LONG).show();
+
                 }else {
+
                     // Amosar datos do pedido
                     Intent intent1 = getIntent();
                     String textoPedido = "Datos do pedido:"
@@ -42,12 +46,12 @@ public class EnderezoEnvio extends AppCompatActivity {
 
                     Toast.makeText(getApplicationContext(), textoPedido, Toast.LENGTH_LONG).show();
 
-                    // Esperar unos segundos a pechar a activity
-
+                    // Esperar unos segundos a pechar a activity para permitir ver a mensaxe Toast
                     Handler h = new Handler();
                     h.postDelayed(new Runnable() {
                         public void run() {
-                            // Pasados uns segundos, devolver datos de pechar
+
+                            // Devolvemos datos e pechamos
                             Intent datosVolta = new Intent();
                             datosVolta.putExtra("Destruir", true);
                             setResult(1, datosVolta);    // Resultado para destruir a activity que chamou a esta.

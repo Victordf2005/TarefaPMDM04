@@ -18,7 +18,7 @@ public class FacerPedido extends AppCompatActivity {
     public final static String PRODUTO = "produto";
     public final static String CANTIDADE = "cantidade";
 
-    // Gardar elementos seleccionados, xa que se perde cando cambia de orientación
+    // Gardar elementos seleccionados, xa que se perden cando cambia de orientación
     @Override
     protected void onSaveInstanceState(Bundle estado){
         super.onSaveInstanceState(estado);
@@ -48,8 +48,12 @@ public class FacerPedido extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int posicion, long id) {
 
+                //Cando seleccione unha categoría, cargamos os produtos que inclúe
                 switch (posicion) {
                     case 0: {
+                        // Ningunha categoría selecionada
+                        Spinner sp = findViewById(R.id.spnProduto);
+                        sp.setSelection(0);
                         habilitarSpinnerProductos(false );
                         habilitarBotonSeguinte(false);
                         break;
@@ -59,7 +63,7 @@ public class FacerPedido extends AppCompatActivity {
                         // Crear un ArrayAdapter usando un string array e un spinner layout por defecto
                         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getApplicationContext(),
                                 R.array.arrInformatica, android.R.layout.simple_spinner_item);
-                        // Indicar o layout a usar cando se caruge a lista
+                        // Indicar o layout a usar cando se cargue a lista
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         // Aplicar o adapter ao spinner
                         spP.setAdapter(adapter);
@@ -72,7 +76,7 @@ public class FacerPedido extends AppCompatActivity {
                         // Crear un ArrayAdapter usando un string array e un spinner layout por defecto
                         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getApplicationContext(),
                                 R.array.arrElectronica, android.R.layout.simple_spinner_item);
-                        // Indicar o layout a usar cando se caruge a lista
+                        // Indicar o layout a usar cando se cargue a lista
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         // Aplicar o adapter ao spinner
                         spP.setAdapter(adapter);
@@ -85,7 +89,7 @@ public class FacerPedido extends AppCompatActivity {
                         // Crear un ArrayAdapter usando un string array e un spinner layout por defecto
                         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getApplicationContext(),
                                 R.array.arrMobiles, android.R.layout.simple_spinner_item);
-                        // Indicar o layout a usar cando se caruge a lista
+                        // Indicar o layout a usar cando se cargue a lista
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         // Aplicar o adapter ao spinner
                         spP.setAdapter(adapter);
@@ -110,6 +114,7 @@ public class FacerPedido extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int posicion, long id) {
 
+                // Só habilitamos o botón "seguinte" cando teña selecionado algún produto
                 switch (posicion) {
                     case 0: {
                         habilitarBotonSeguinte(false);
@@ -134,12 +139,16 @@ public class FacerPedido extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                //crear activity e lanzala
+                //crear activity
                 Intent intent = new Intent();
                 intent.setClassName(getApplicationContext(), "tenda.tarefa_02.EnderezoEnvio");
+
+                // Pasámoslle á activity os datos selecionados
                 intent.putExtra(CATEGORIA, ((Spinner) findViewById(R.id.spnCategoria)).getSelectedItem().toString());
                 intent.putExtra(PRODUTO, ((Spinner) findViewById(R.id.spnProduto)).getSelectedItem().toString());
                 intent.putExtra(CANTIDADE, ((Spinner) findViewById(R.id.spnCantidade)).getSelectedItem().toString());
+
+                //Lanzamos a activity
                 startActivityForResult(intent, 211);
 
             }
@@ -182,4 +191,12 @@ public class FacerPedido extends AppCompatActivity {
         habilitarBotonSeguinte(false);
 
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Spinner spCat = findViewById(R.id.spnCategoria);
+        spCat.setSelection(0);
+    }
+
 }

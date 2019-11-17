@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        //borrar datos de login
+        // Independentemente de donde veña, borramos datos de login
         EditText etUsuario = findViewById(R.id.etUsuario);
         EditText etContrasinal = findViewById(R.id.etContrasinal);
 

@@ -1,4 +1,4 @@
-package tenda.tarefa_02;
+package tenda.tarefa_03;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import tenda.tarefa_02.R;
 
 public class Cliente extends AppCompatActivity {
 
@@ -24,7 +26,7 @@ public class Cliente extends AppCompatActivity {
 
                     //crear activity e lanzala
                     Intent intent = new Intent();
-                    intent.setClassName(getApplicationContext(), "tenda.tarefa_02.FacerPedido");
+                    intent.setClassName(getApplicationContext(), "FacerPedido");
                     startActivity(intent);
             }
         });
@@ -38,7 +40,7 @@ public class Cliente extends AppCompatActivity {
 
                 //crear activity e lanzala
                 Intent intent = new Intent();
-                intent.setClassName(getApplicationContext(), "tenda.tarefa_02.VerPedidos");
+                intent.setClassName(getApplicationContext(), "VerPedidos");
                 startActivity(intent);
             }
         });
@@ -52,7 +54,7 @@ public class Cliente extends AppCompatActivity {
 
                 //crear activity e lanzala
                 Intent intent = new Intent();
-                intent.setClassName(getApplicationContext(), "tenda.tarefa_02.VerCompras");
+                intent.setClassName(getApplicationContext(), "VerCompras");
                 startActivity(intent);
             }
         });

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context="tenda.tarefa_03.MainActivity">
 
     <TextView
         android:id="@+id/tvTitulo"
@@ -50,7 +50,7 @@
             android:hint="Teclee o contrasinal"
             android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/etUsuario" />
 
         <Button
@@ -61,9 +61,17 @@
             android:text="Iniciar sesión"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/etContrasinal" />
+
+        <Button
+            android:id="@+id/btRexistrar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Rexistrarse"
+            app:layout_constraintStart_toEndOf="@+id/btLogIn"
+            app:layout_constraintTop_toTopOf="@+id/btLogIn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

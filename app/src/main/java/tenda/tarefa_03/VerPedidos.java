@@ -1,14 +1,16 @@
-package tenda.tarefa_02;
+package tenda.tarefa_03;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class VerCompras extends AppCompatActivity {
+import tenda.tarefa_02.R;
+
+public class VerPedidos extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ver_compras);
+        setContentView(R.layout.activity_ver_pedidos);
     }
 }

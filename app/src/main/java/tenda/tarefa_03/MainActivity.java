@@ -1,4 +1,4 @@
-package tenda.tarefa_02;
+package tenda.tarefa_03;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import tenda.tarefa_02.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,14 +32,14 @@ public class MainActivity extends AppCompatActivity {
 
                     //crear activity e lanzala
                     Intent intent = new Intent();
-                    intent.setClassName(getApplicationContext(), "tenda.tarefa_02.Administrador");
+                    intent.setClassName(getApplicationContext(), "Administrador");
                     startActivityForResult(intent,1);
 
                 }else if (usuario.equals("cliente1") && contrasinal.equals("abc123.")) {
 
                     //crear activity e lanzala
                     Intent intent = new Intent();
-                    intent.setClassName(getApplicationContext(), "tenda.tarefa_02.Cliente");
+                    intent.setClassName(getApplicationContext(), "Cliente");
                     startActivityForResult(intent,2);
 
                 } else {

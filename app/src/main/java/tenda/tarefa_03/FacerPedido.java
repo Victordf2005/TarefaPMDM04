@@ -1,10 +1,13 @@
-package tenda.tarefa_02;
+// VERSION DESENVOLVIDA POLO PROFESOR
+
+package tenda.tarefa_03;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,11 +15,16 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import tenda.tarefa_02.R;
+
+//TODO: Facer que se habilite e inhabilite o boton seguinte de xeito correcto
 public class FacerPedido extends AppCompatActivity {
 
+    //Nomes das variables en SaveInstanceState
     public final static String CATEGORIA = "categoria";
     public final static String PRODUTO = "produto";
     public final static String CANTIDADE = "cantidade";
+
 
     // Gardar elementos seleccionados, xa que se perden cando cambia de orientación
     @Override
@@ -30,13 +38,72 @@ public class FacerPedido extends AppCompatActivity {
     // Recuperar elementos seleccionados cando cambie a orientación
     @Override
     protected void onRestoreInstanceState(Bundle estado) {
-        Spinner spCat = findViewById(R.id.spnCategoria);
-        spCat.setSelection((estado.getInt("CAT")));
-        Spinner spProd = findViewById(R.id.spnProduto);
-        spProd.setSelection(estado.getInt("PROD"));
-        Spinner spCant = findViewById(R.id.spnCantidade);
-        spCant.setSelection(estado.getInt("CANT"));
+        super.onRestoreInstanceState(estado);
 
+        //Collemos o spinner e seleccionamos a categoría que estaba escollida e deshabilitamos os listeners
+        Spinner spCat = findViewById(R.id.spnCategoria);
+        int estadoCategoria = estado.getInt("CAT");
+        spCat.setOnItemSelectedListener(null);
+
+        //Collemos  spiner do prodcuto e o seu estado
+        int estadoProducto = estado.getInt("PROD");
+        Spinner spProd = findViewById(R.id.spnProduto);
+        spProd.setOnItemSelectedListener(null);
+
+        //Collemos o spinner de cantidade e o seu estado
+        int estadoCantidade = estado.getInt("CANT");
+        Spinner spCant = findViewById(R.id.spnCantidade);
+        spCant.setOnItemSelectedListener(null);
+
+        //Seleccionamos a categoría que tiñamos antes
+        spCat.setSelection(estadoCategoria,false);
+
+        if(estadoCategoria > 0) {
+
+            //Collemos o array cos datos que meteremos no spinner do producto segundo a seleccion de categoria
+            ArrayAdapter<CharSequence> adapter;
+            switch (estadoCategoria){
+                case 1:
+                    adapter = ArrayAdapter.createFromResource(getApplicationContext(),
+                            R.array.arrInformatica, android.R.layout.simple_spinner_item);
+                    break;
+                case 2:
+                    adapter = ArrayAdapter.createFromResource(getApplicationContext(),
+                            R.array.arrElectronica, android.R.layout.simple_spinner_item);
+                    break;
+                default:
+                    adapter = ArrayAdapter.createFromResource(getApplicationContext(),
+                            R.array.arrMobiles, android.R.layout.simple_spinner_item);
+                    break;
+            }
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            // Aplicar o adapter ao spinner
+            spProd.setAdapter(adapter);
+            // Habilitar o spinner
+            spProd.setEnabled(true);
+
+            //selecionamos o producto que estaba
+            if(estadoProducto > 0){
+                spCant.setEnabled(true);
+                spProd.setSelection(estadoProducto,false);
+
+                //Agora seleccionamos a cantidade de productos
+                spCant.setSelection(estadoCantidade,false);
+
+            }
+            else{
+                //Non deixamos escoller a cantidade
+                spCant.setEnabled(false);
+            }
+        }
+        else{
+            spProd.setEnabled(false);
+            spCant.setEnabled(false);
+        }
+
+        //Habilitamos os liesteners
+        this.xestionarEventos();
+        habilitarBotonSeguinte(spCant.isEnabled());
     }
 
     private void xestionarEventos(){
@@ -48,12 +115,11 @@ public class FacerPedido extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int posicion, long id) {
 
-                //Cando seleccione unha categoría, cargamos os produtos que inclúe
+
                 switch (posicion) {
                     case 0: {
                         // Ningunha categoría selecionada
                         Spinner sp = findViewById(R.id.spnProduto);
-                        sp.setSelection(0);
                         habilitarSpinnerProductos(false );
                         habilitarBotonSeguinte(false);
                         break;
@@ -98,6 +164,7 @@ public class FacerPedido extends AppCompatActivity {
                         break;
                     }
                 }
+
             }
 
             @Override
@@ -113,14 +180,20 @@ public class FacerPedido extends AppCompatActivity {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int posicion, long id) {
+                if(view == null) return;
+                Log.i("onItemSelectedP","producto: " + posicion);
 
+                Spinner spCant = findViewById(R.id.spnCantidade);
                 // Só habilitamos o botón "seguinte" cando teña selecionado algún produto
                 switch (posicion) {
                     case 0: {
+
                         habilitarBotonSeguinte(false);
+                        spCant.setEnabled(false);
                         break;
                     }
                     default: {
+                        spCant.setEnabled(true);
                         habilitarBotonSeguinte(true );
                     }
                 }
@@ -141,7 +214,7 @@ public class FacerPedido extends AppCompatActivity {
 
                 //crear activity
                 Intent intent = new Intent();
-                intent.setClassName(getApplicationContext(), "tenda.tarefa_02.EnderezoEnvio");
+                intent.setClassName(getApplicationContext(), "EnderezoEnvio");
 
                 // Pasámoslle á activity os datos selecionados
                 intent.putExtra(CATEGORIA, ((Spinner) findViewById(R.id.spnCategoria)).getSelectedItem().toString());
@@ -187,6 +260,8 @@ public class FacerPedido extends AppCompatActivity {
 
         xestionarEventos();
 
+        Spinner spCant = findViewById(R.id.spnCantidade);
+        spCant.setEnabled(false);
         habilitarSpinnerProductos(false );
         habilitarBotonSeguinte(false);
 

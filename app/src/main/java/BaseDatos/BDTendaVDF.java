@@ -47,7 +47,7 @@ public class BDTendaVDF extends SQLiteOpenHelper {
 
     // Método para devolver un obxecto usuario se existe.
     // Se o usuario non existe, devolve null
-    public Usuario usuario (String usuario, String contrasinal) {
+    public Usuario getUsuario (String usuario, String contrasinal) {
 
         // Por defecto asumimos que as credenciais non son correctas
         Usuario retorno = null;

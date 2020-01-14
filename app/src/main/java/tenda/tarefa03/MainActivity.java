@@ -1,15 +1,20 @@
-package tenda.tarefa_03;
+package tenda.tarefa03;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import BaseDatos.BDTendaVDF;
 
 import BaseDatos.Usuario;
@@ -28,10 +33,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
+
                 EditText etUsuario = findViewById(R.id.etUsuario);
                 EditText etContrasinal = findViewById(R.id.etContrasinal);
 
-                // Obtemos os datos do usuario loggeado nun obxecto Usuario
                 usuarioLoggeado = baseDatos.getUsuario(etUsuario.getText().toString(), etContrasinal.getText().toString());
 
                 // Comprobamos se o usuario existe e o tipo
@@ -42,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                             // Usuario de tipo administrador
                             // crear activity e lanzala
                             Intent intent = new Intent();
-                            intent.setClassName(getApplicationContext(), "Administrador");
+                            intent.setClassName(getApplicationContext(), "tenda.tarefa03.Administrador");
                             startActivityForResult(intent,1);
                             break;
                         }
@@ -50,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                             // Usuario de tipo cliente
                             // crear activity e lanzala
                             Intent intent = new Intent();
-                            intent.setClassName(getApplicationContext(), "Cliente");
+                            intent.setClassName(getApplicationContext(), "tendra.tarefa03.Cliente");
                             startActivityForResult(intent,2);
                             break;
                         }
@@ -67,24 +72,60 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         // Botón para rexistrarse
         Button btnRexistrase = findViewById(R.id.btRexistrar);
         btnRexistrase.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                // crear activity de solicitude de datos para rexistrarse e lanzala
+                //crear activity e lanzala
                 Intent intent = new Intent();
-                intent.setClassName(getApplicationContext(), "Rexistro");
-                startActivityForResult(intent, 3);
+                intent.setClassName(getApplicationContext(), "tenda.tarefa03.Rexistro");
+                startActivityForResult(intent,2);
             }
         });
-}
+
+
+    }
+
+    private void copiarBD() {
+        String bddestino = "/data/data/" + getPackageName() + "/databases/"
+                + BDTendaVDF.NOME_BD;
+        File file = new File(bddestino);
+        if (!file.exists()) {
+
+            // A BD non existe no cartafol de destino, podemos copiala
+            String pathbd = "/data/data/" + getPackageName() + "/databases";
+            File filepathdb = new File(pathbd);
+            if (!filepathdb.exists()) {
+                filepathdb.mkdirs();
+            }
+
+            InputStream inputstream;
+            try {
+                inputstream = getAssets().open(BDTendaVDF.NOME_BD);
+                OutputStream outputstream = new FileOutputStream(bddestino);
+
+                int tamread;
+                byte[] buffer = new byte[2048];
+
+                while ((tamread = inputstream.read(buffer)) > 0) {
+                    outputstream.write(buffer, 0, tamread);
+                }
+
+                inputstream.close();
+                outputstream.flush();
+                outputstream.close();
+
+            } catch (Exception erro) {
+                Toast.makeText(getApplicationContext(), "Erro inicializando Base de Datos", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 
     @Override
     public void onStart(){
-        super.onStart();
+    super.onStart();
 
         if (baseDatos == null) {
             // Abrimos a base de datos para escritura
@@ -128,5 +169,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         xestionarEventos();
+        copiarBD();
     }
+
 }

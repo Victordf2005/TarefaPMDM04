@@ -9,23 +9,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="tenda.tarefa_03.Rexistro"></activity>
-        <activity android:name="tenda.tarefa_03.VerCompras" />
-        <activity android:name="tenda.tarefa_03.VerPedidos" />
+        <activity android:name="tenda.tarefa03.Rexistro"></activity>
+        <activity android:name="tenda.tarefa03.VerCompras" />
+        <activity android:name="tenda.tarefa03.VerPedidos" />
         <activity
-            android:name="tenda.tarefa_03.EnderezoEnvio"
+            android:name="tenda.tarefa03.EnderezoEnvio"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name="tenda.tarefa_03.FacerPedido"
+            android:name="tenda.tarefa03.FacerPedido"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name="tenda.tarefa_03.Cliente"
+            android:name="tenda.tarefa03.Cliente"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name="tenda.tarefa_03.Administrador"
+            android:name="tenda.tarefa03.Administrador"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name="tenda.tarefa_03.MainActivity"
+            android:name="tenda.tarefa03.MainActivity"
             android:screenOrientation="fullSensor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

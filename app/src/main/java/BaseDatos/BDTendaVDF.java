@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class BDTendaVDF extends SQLiteOpenHelper {
 
-    public final static String NOME_BD = "BDTendaVDF.db";
+    public final static String NOME_BD = "bdTarefa03.db";
     public final static int VERSION_BD = 1;
     public final static String TABOA_USUARIOS = "usuarios";
 
@@ -53,7 +53,7 @@ public class BDTendaVDF extends SQLiteOpenHelper {
         Usuario retorno = null;
 
         // Comprobamos as credenciais
-        Cursor consulta = sqlLiteDB.rawQuery("select * from " + TABOA_USUARIOS +" where us_usuario = ? and us_constrasinal = ?", new String[] { usuario, contrasinal });
+        Cursor consulta = sqlLiteDB.rawQuery("select * from " + TABOA_USUARIOS +" where us_usuario = ? and us_contrasinal = ?", new String[] { usuario, contrasinal });
 
         if (consulta.moveToFirst()) {
             retorno = new Usuario(

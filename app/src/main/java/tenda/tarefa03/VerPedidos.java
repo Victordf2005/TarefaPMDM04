@@ -1,4 +1,4 @@
-package tenda.tarefa_03;
+package tenda.tarefa03;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import tenda.tarefa_02.R;
 
-public class Rexistro extends AppCompatActivity {
+public class VerPedidos extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rexistro);
+        setContentView(R.layout.activity_ver_pedidos);
     }
 }

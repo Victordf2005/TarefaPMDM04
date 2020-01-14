@@ -1,4 +1,4 @@
-package tenda.tarefa_03;
+package tenda.tarefa03;
 
 import androidx.appcompat.app.AppCompatActivity;
 

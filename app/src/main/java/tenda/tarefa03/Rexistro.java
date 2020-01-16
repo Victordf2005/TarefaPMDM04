@@ -37,7 +37,9 @@ public class Rexistro extends AppCompatActivity {
         String usuario = etUsuario.getText().toString();
 
         // Comprobamos se xa existe un usuario rexistrado con ese mesmo usuario
-        if (baseDatos.existeUsuario(usuario)) {
+        Boolean xaExiste = baseDatos.existeUsuario(etUsuario.getText().toString());
+
+        if (xaExiste) {
 
             // Xa hai un rexistro na BD con ese usuario
             Toast.makeText(getApplicationContext(), "Xa hai un rexistro con usuario '" + usuario + "'; non se pode rexistrar este novo usuario.", Toast.LENGTH_LONG).show();

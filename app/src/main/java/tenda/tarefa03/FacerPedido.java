@@ -4,7 +4,6 @@ package tenda.tarefa03;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,8 +12,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.Toast;
-
 
 //TODO: Facer que se habilite e inhabilite o boton seguinte de xeito correcto
 public class FacerPedido extends AppCompatActivity {
@@ -23,7 +20,6 @@ public class FacerPedido extends AppCompatActivity {
     public final static String CATEGORIA = "categoria";
     public final static String PRODUTO = "produto";
     public final static String CANTIDADE = "cantidade";
-
 
     // Gardar elementos seleccionados, xa que se perden cando cambia de orientación
     @Override

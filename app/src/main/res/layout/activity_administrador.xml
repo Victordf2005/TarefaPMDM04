@@ -24,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/ivAdministrador"
+                android:id="@+id/ivAdmin"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -37,7 +37,7 @@
                 app:srcCompat="@drawable/admin" />
 
             <TextView
-                android:id="@+id/tvNomeCliente"
+                android:id="@+id/tvNomeAdmin"
                 style="@style/NomeCliente"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -21,6 +21,8 @@ import BaseDatos.Usuario;
 
 public class MainActivity extends AppCompatActivity {
 
+    public final static String USUARIO = "usuario";
+
     private BDTendaVDF baseDatos;
     private Usuario usuarioLoggeado = null;
 
@@ -36,43 +38,47 @@ public class MainActivity extends AppCompatActivity {
                 EditText etUsuario = findViewById(R.id.etUsuario);
                 EditText etContrasinal = findViewById(R.id.etContrasinal);
 
-                usuarioLoggeado = baseDatos.getUsuario(etUsuario.getText().toString(), etContrasinal.getText().toString());
+                    usuarioLoggeado = baseDatos.getUsuario(etUsuario.getText().toString(), etContrasinal.getText().toString(), false);
 
-                // Comprobamos se o usuario existe e o tipo
-                if (usuarioLoggeado != null) {
+                    // Comprobamos se o usuario existe e o tipo
+                    if (usuarioLoggeado != null) {
 
-                    if (usuarioLoggeado.getTipo() == null) {
-                        // Tipo de usuario null. Avisar
-                        Toast.makeText(getApplicationContext(), "Tipo de usuario null.", Toast.LENGTH_LONG).show();
-                    }else {
-                        switch (usuarioLoggeado.getTipo()) {
-                            case "A": {
-                                // Usuario de tipo administrador
-                                // crear activity e lanzala
-                                Intent intent = new Intent();
-                                intent.setClassName(getApplicationContext(), "tenda.tarefa03.Administrador");
-                                startActivityForResult(intent, 1);
-                                break;
-                            }
-                            case "C": {
-                                // Usuario de tipo cliente
-                                // crear activity e lanzala
-                                Intent intent = new Intent();
-                                intent.setClassName(getApplicationContext(), "tenda.tarefa03.Cliente");
-                                startActivityForResult(intent, 2);
-                                break;
-                            }
-                            default: {
-                                // Tipo de usuario descoñecido. Avisar
-                                Toast.makeText(getApplicationContext(), "Tipo de usuario descoñecido.", Toast.LENGTH_LONG).show();
+                        if (usuarioLoggeado.getTipo() == null) {
+                            // Tipo de usuario null. Avisar
+                            Toast.makeText(getApplicationContext(), "Tipo de usuario null.", Toast.LENGTH_LONG).show();
+                        } else {
+                            switch (usuarioLoggeado.getTipo()) {
+                                case "A": {
+                                    // Usuario de tipo administrador
+                                    // crear activity e lanzala
+                                    Intent intent = new Intent();
+                                    intent.setClassName(getApplicationContext(), "tenda.tarefa03.Administrador");
+                                    // Pasámoslle á activity os datos do usuario
+                                    intent.putExtra(USUARIO, usuarioLoggeado.getUsuario());
+                                    startActivityForResult(intent, 1);
+                                    break;
+                                }
+                                case "C": {
+                                    // Usuario de tipo cliente
+                                    // crear activity e lanzala
+                                    Intent intent = new Intent();
+                                    intent.setClassName(getApplicationContext(), "tenda.tarefa03.Cliente");
+                                    // Pasámoslle á activity os datos do usuario
+                                    intent.putExtra(USUARIO, usuarioLoggeado.getUsuario());
+                                    startActivityForResult(intent, 2);
+                                    break;
+                                }
+                                default: {
+                                    // Tipo de usuario descoñecido. Avisar
+                                    Toast.makeText(getApplicationContext(), "Tipo de usuario descoñecido.", Toast.LENGTH_LONG).show();
+                                }
                             }
                         }
-                    }
 
-                } else {
-                    //usuario incorrecto. Avisar
-                    Toast.makeText(getApplicationContext(), "Usuario e/ou contrasinal incorrectos.", Toast.LENGTH_LONG).show();
-                }
+                    } else {
+                        //usuario incorrecto. Avisar
+                        Toast.makeText(getApplicationContext(), "Usuario e/ou contrasinal incorrectos.", Toast.LENGTH_LONG).show();
+                    }
             }
         });
 

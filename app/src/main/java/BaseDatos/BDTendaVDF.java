@@ -38,19 +38,27 @@ public class BDTendaVDF  extends SQLiteOpenHelper {
     }
 
     public int numUsuariosRexistrados () {
-        Cursor consulta = sqlLiteDB.rawQuery("select * from " + TABOA_USUARIOS, new String[] {});
+
+        // Comprobamos as credenciais
+        Cursor consulta = sqlLiteDB.rawQuery("select * from " + TABOA_USUARIOS , new String[] {});
+
         return consulta.getCount();
     }
 
     // Método para devolver un obxecto usuario se existe.
     // Se o usuario non existe, devolve null
-    public Usuario getUsuario (String usuario, String contrasinal) {
+    public Usuario getUsuario (String usuario, String contrasinal, Boolean soUsuario) {
 
         // Por defecto asumimos que as credenciais non son correctas
         Usuario retorno = null;
+        Cursor consulta = null;
 
         // Comprobamos as credenciais
-        Cursor consulta = sqlLiteDB.rawQuery("select * from " + TABOA_USUARIOS + " where us_usuario= ? and us_contrasinal=?", new String[] {usuario, contrasinal});
+        if (soUsuario) {
+            consulta = sqlLiteDB.rawQuery("select * from " + TABOA_USUARIOS + " where us_usuario= ?", new String[]{usuario});
+        } else {
+            consulta = sqlLiteDB.rawQuery("select * from " + TABOA_USUARIOS + " where us_usuario= ? and us_contrasinal=?", new String[]{usuario, contrasinal});
+        }
 
         if (consulta.moveToFirst()) {
             retorno = new Usuario(

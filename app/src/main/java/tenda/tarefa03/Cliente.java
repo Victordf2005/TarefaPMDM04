@@ -4,14 +4,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import BaseDatos.BDTendaVDF;
+import BaseDatos.Usuario;
 
 public class Cliente extends AppCompatActivity {
 
+    private BDTendaVDF baseDatos;
+    private Usuario usuario;
 
     private void xestionarEventos(){
 
@@ -71,6 +76,46 @@ public class Cliente extends AppCompatActivity {
 
     }
 
+    private void buscarDatosCliente() {
+        Intent intent1 = getIntent();
+        usuario = baseDatos.getUsuario(intent1.getExtras().getString(MainActivity.USUARIO),null, true);
+        TextView lblCliente = findViewById(R.id.tvNomeCliente);
+        lblCliente.setText(usuario.getNome() + "\n" + usuario.getApelidos());
+    }
+
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        if (baseDatos == null) {
+            // Abrimos a base de datos para escritura
+            try {
+                baseDatos = BDTendaVDF.getInstance(getApplicationContext());
+                baseDatos.abrirBD();
+
+                buscarDatosCliente();
+
+            }
+            catch (Exception erro) {
+                // Erro tratando de abrir a BD
+                Toast.makeText(getApplicationContext(), "Erro tratando de acceder á base de datos: " + erro.toString(), Toast.LENGTH_LONG).show();
+                finish();
+            }
+        }
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+
+        if (baseDatos != null){
+            // Pechamos a base de datos.
+            baseDatos.pecharBD();
+            baseDatos=null;
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +123,6 @@ public class Cliente extends AppCompatActivity {
         setContentView(R.layout.activity_cliente);
 
         xestionarEventos();
-
 
     }
 

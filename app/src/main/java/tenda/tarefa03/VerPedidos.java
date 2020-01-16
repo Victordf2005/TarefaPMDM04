@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import tenda.tarefa_02.R;
 
 public class VerPedidos extends AppCompatActivity {
 

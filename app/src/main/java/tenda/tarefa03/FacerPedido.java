@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import tenda.tarefa_02.R;
 
 //TODO: Facer que se habilite e inhabilite o boton seguinte de xeito correcto
 public class FacerPedido extends AppCompatActivity {

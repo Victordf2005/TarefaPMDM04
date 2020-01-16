@@ -29,20 +29,11 @@ public class BDTendaVDF extends SQLiteOpenHelper {
     }
 
     // Método para averiguar se xa hai un usuario rexistrado
-    public boolean existe(String usuario) {
-
-        // Por defecto asumimos que non existe o usuario
-        Boolean retorno = false;
+    public boolean existeUsuario(String usuario) {
 
         // Comprobamos se o usuario xa existe na base de datos
-        Cursor consulta = sqlLiteDB.rawQuery("select _id from " + TABOA_USUARIOS +" where us_usuario = ?", new String[] { usuario });
-
-        if (consulta.moveToFirst()) {
-            // Informamos que o usuario xa existe
-            retorno = true;
-        }
-
-        return retorno;
+        Cursor consulta = sqlLiteDB.rawQuery("select * from " + TABOA_USUARIOS + " where us_usuario= ?", new String[] {usuario});
+        return (consulta.getCount()>0);
     }
 
     // Método para devolver un obxecto usuario se existe.
@@ -53,11 +44,11 @@ public class BDTendaVDF extends SQLiteOpenHelper {
         Usuario retorno = null;
 
         // Comprobamos as credenciais
-        Cursor consulta = sqlLiteDB.rawQuery("select * from " + TABOA_USUARIOS +" where us_usuario = ? and us_contrasinal = ?", new String[] { usuario, contrasinal });
+        Cursor consulta = sqlLiteDB.rawQuery("select * from " + TABOA_USUARIOS + " where us_usuario= ? and us_contrasinal=?", new String[] {usuario, contrasinal});
 
         if (consulta.moveToFirst()) {
             retorno = new Usuario(
-                    consulta.getLong(0),
+                    consulta.getInt(0),
                     consulta.getString(1),
                     consulta.getString(2),
                     consulta.getString(3),
@@ -67,6 +58,12 @@ public class BDTendaVDF extends SQLiteOpenHelper {
         }
 
         return retorno;
+    }
+
+    public int numUsuariosRexistrados () {
+
+        Cursor consulta = sqlLiteDB.rawQuery("select * from " + TABOA_USUARIOS, new String[] {});
+        return consulta.getCount();
     }
 
     // Método para engadir un novo usuario

@@ -18,12 +18,11 @@ import java.io.OutputStream;
 import BaseDatos.BDTendaVDF;
 
 import BaseDatos.Usuario;
-import tenda.tarefa_02.R;
 
 public class MainActivity extends AppCompatActivity {
 
     private BDTendaVDF baseDatos;
-    protected Usuario usuarioLoggeado = null;
+    private Usuario usuarioLoggeado = null;
 
     private void xestionarEventos(){
 
@@ -42,26 +41,31 @@ public class MainActivity extends AppCompatActivity {
                 // Comprobamos se o usuario existe e o tipo
                 if (usuarioLoggeado != null) {
 
-                    switch (usuarioLoggeado.getTipo()) {
-                        case "A": {
-                            // Usuario de tipo administrador
-                            // crear activity e lanzala
-                            Intent intent = new Intent();
-                            intent.setClassName(getApplicationContext(), "tenda.tarefa03.Administrador");
-                            startActivityForResult(intent,1);
-                            break;
-                        }
-                        case "C": {
-                            // Usuario de tipo cliente
-                            // crear activity e lanzala
-                            Intent intent = new Intent();
-                            intent.setClassName(getApplicationContext(), "tendra.tarefa03.Cliente");
-                            startActivityForResult(intent,2);
-                            break;
-                        }
-                        default: {
-                            // Tipo de usuario descoñecido. Avisar
-                            Toast.makeText(getApplicationContext(), "Tipo de usuario descoñecido.", Toast.LENGTH_LONG).show();
+                    if (usuarioLoggeado.getTipo() == null) {
+                        // Tipo de usuario null. Avisar
+                        Toast.makeText(getApplicationContext(), "Tipo de usuario null.", Toast.LENGTH_LONG).show();
+                    }else {
+                        switch (usuarioLoggeado.getTipo()) {
+                            case "A": {
+                                // Usuario de tipo administrador
+                                // crear activity e lanzala
+                                Intent intent = new Intent();
+                                intent.setClassName(getApplicationContext(), "tenda.tarefa03.Administrador");
+                                startActivityForResult(intent, 1);
+                                break;
+                            }
+                            case "C": {
+                                // Usuario de tipo cliente
+                                // crear activity e lanzala
+                                Intent intent = new Intent();
+                                intent.setClassName(getApplicationContext(), "tenda.tarefa03.Cliente");
+                                startActivityForResult(intent, 2);
+                                break;
+                            }
+                            default: {
+                                // Tipo de usuario descoñecido. Avisar
+                                Toast.makeText(getApplicationContext(), "Tipo de usuario descoñecido.", Toast.LENGTH_LONG).show();
+                            }
                         }
                     }
 
@@ -92,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
         String bddestino = "/data/data/" + getPackageName() + "/databases/"
                 + BDTendaVDF.NOME_BD;
         File file = new File(bddestino);
+
         if (!file.exists()) {
 
             // A BD non existe no cartafol de destino, podemos copiala
@@ -132,10 +137,11 @@ public class MainActivity extends AppCompatActivity {
             try {
                 baseDatos = BDTendaVDF.getInstance(getApplicationContext());
                 baseDatos.abrirBD();
+                Toast.makeText(getApplicationContext(), "Num Rexistros " + baseDatos.numUsuariosRexistrados(), Toast.LENGTH_LONG).show();
             }
             catch (Exception erro) {
                 // Erro tratando de abrir a BD
-                Toast.makeText(getApplicationContext(), "Erro tratando de acceder á base de datos.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Erro tratando de acceder á base de datos: " + erro.toString(), Toast.LENGTH_LONG).show();
                 finish();
             }
         }

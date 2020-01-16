@@ -2,7 +2,7 @@ package BaseDatos;
 
 public class Usuario {
 
-    private long codigo = 0;
+    private int codigo = 0;
     private String nome = "";
     private String apelidos = "";
     private String email = "";
@@ -14,7 +14,7 @@ public class Usuario {
     public Usuario(){}
 
     // construtor con parámetros
-    public Usuario(long codigo, String nome, String apelidos, String email, String usuario, String contrasinal, String tipo) {
+    public Usuario(int codigo, String nome, String apelidos, String email, String usuario, String contrasinal, String tipo) {
         this.codigo = codigo;
         this.nome = nome;
         this.apelidos = apelidos;
@@ -34,7 +34,7 @@ public class Usuario {
     public String getTipo() {return this.tipo;}
 
     // setters
-    // non se crea un setter para código porque o establece a base de datos
+    public void setCodigo(int codigo) {this.codigo = codigo;}
     public void setNome(String nome) {this.nome = nome;}
     public void setApelidos(String apelidos) {this.apelidos = apelidos;}
     public void setEmail(String email) {this.email = email;}

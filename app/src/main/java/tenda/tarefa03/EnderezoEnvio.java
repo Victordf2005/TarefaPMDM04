@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import tenda.tarefa_02.R;
 
 public class EnderezoEnvio extends AppCompatActivity {
 

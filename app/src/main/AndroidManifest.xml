@@ -9,9 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="tenda.tarefa03.Rexistro"></activity>
-        <activity android:name="tenda.tarefa03.VerCompras" />
-        <activity android:name="tenda.tarefa03.VerPedidos" />
+        <activity
+            android:name="tenda.tarefa03.Rexistro"
+            android:screenOrientation="fullSensor" />
+        <activity
+            android:name="tenda.tarefa03.VerCompras"
+            android:screenOrientation="fullSensor" />
+        <activity
+            android:name="tenda.tarefa03.VerPedidos"
+            android:screenOrientation="fullSensor" />
         <activity
             android:name="tenda.tarefa03.EnderezoEnvio"
             android:screenOrientation="fullSensor" />

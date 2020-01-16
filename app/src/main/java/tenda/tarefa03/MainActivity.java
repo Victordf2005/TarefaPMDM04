@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
+
                 //crear activity e lanzala
                 Intent intent = new Intent();
                 intent.setClassName(getApplicationContext(), "tenda.tarefa03.Rexistro");
@@ -137,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
             try {
                 baseDatos = BDTendaVDF.getInstance(getApplicationContext());
                 baseDatos.abrirBD();
-                Toast.makeText(getApplicationContext(), "Num Rexistros " + baseDatos.numUsuariosRexistrados(), Toast.LENGTH_LONG).show();
             }
             catch (Exception erro) {
                 // Erro tratando de abrir a BD

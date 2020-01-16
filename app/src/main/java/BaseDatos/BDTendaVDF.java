@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class BDTendaVDF extends SQLiteOpenHelper {
+public class BDTendaVDF  extends SQLiteOpenHelper {
 
     public final static String NOME_BD = "bdTarefa03.db";
     public final static int VERSION_BD = 1;
@@ -33,7 +33,13 @@ public class BDTendaVDF extends SQLiteOpenHelper {
 
         // Comprobamos se o usuario xa existe na base de datos
         Cursor consulta = sqlLiteDB.rawQuery("select * from " + TABOA_USUARIOS + " where us_usuario= ?", new String[] {usuario});
-        return (consulta.getCount()>0);
+
+        return consulta.getCount() > 0;
+    }
+
+    public int numUsuariosRexistrados () {
+        Cursor consulta = sqlLiteDB.rawQuery("select * from " + TABOA_USUARIOS, new String[] {});
+        return consulta.getCount();
     }
 
     // Método para devolver un obxecto usuario se existe.
@@ -60,11 +66,6 @@ public class BDTendaVDF extends SQLiteOpenHelper {
         return retorno;
     }
 
-    public int numUsuariosRexistrados () {
-
-        Cursor consulta = sqlLiteDB.rawQuery("select * from " + TABOA_USUARIOS, new String[] {});
-        return consulta.getCount();
-    }
 
     // Método para engadir un novo usuario
     public long engadirUsuario(String nome, String apelidos, String email, String usuario, String contrasinal, String tipo) {
@@ -85,7 +86,6 @@ public class BDTendaVDF extends SQLiteOpenHelper {
 
         return codigo;
     }
-
     public void abrirBD(){
         if (sqlLiteDB==null || !sqlLiteDB.isOpen()){
             sqlLiteDB = sInstance.getWritableDatabase();
@@ -97,6 +97,7 @@ public class BDTendaVDF extends SQLiteOpenHelper {
             sqlLiteDB.close();
         }
     }
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {

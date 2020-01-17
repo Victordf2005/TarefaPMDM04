@@ -6,11 +6,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+
 public class BDTendaVDF  extends SQLiteOpenHelper {
 
     public final static String NOME_BD = "bdTarefa03.db";
     public final static int VERSION_BD = 1;
     public final static String TABOA_USUARIOS = "usuarios";
+    public final static String TABOA_PEDIDOS = "pedidos";
 
     private static BDTendaVDF sInstance;
     private SQLiteDatabase sqlLiteDB;
@@ -45,6 +48,32 @@ public class BDTendaVDF  extends SQLiteOpenHelper {
         return consulta.getCount();
     }
 
+    public int numPedidos() {
+        Cursor consulta = sqlLiteDB.rawQuery("select * from pedidos", new String[] {});
+        return consulta.getCount();
+    }
+
+
+    // Método para engadir un novo usuario
+    public long engadirUsuario(String nome, String apelidos, String email, String usuario, String contrasinal, String tipo) {
+
+        // creamos o rexistro
+        ContentValues rexistro = new ContentValues();
+
+        // engadimos valores ás columnas
+        rexistro.put("us_nome", nome);
+        rexistro.put("us_apelidos", apelidos);
+        rexistro.put("us_email", email);
+        rexistro.put("us_usuario", usuario);
+        rexistro.put("us_contrasinal", contrasinal);
+        rexistro.put("us_tipo", tipo);
+
+        // gravamos na BD, que nos devolve o _id do rexistro ou -1 se hai erro
+        long codigo = sqlLiteDB.insert(TABOA_USUARIOS, null, rexistro);
+
+        return codigo;
+    }
+
     // Método para devolver un obxecto usuario se existe.
     // Se o usuario non existe, devolve null
     public Usuario getUsuario (String usuario, String contrasinal, Boolean soUsuario) {
@@ -74,26 +103,47 @@ public class BDTendaVDF  extends SQLiteOpenHelper {
         return retorno;
     }
 
+    public long gravarPedido (String estado, int idCliente, int categoria, int produto, int cantidade, String enderezo, String cidade, String codpostal) {
 
-    // Método para engadir un novo usuario
-    public long engadirUsuario(String nome, String apelidos, String email, String usuario, String contrasinal, String tipo) {
-
-        // creamos o rexistro
         ContentValues rexistro = new ContentValues();
+        rexistro.put("pe_estado", estado);
+        rexistro.put("pe_idcliente", idCliente);
+        rexistro.put("pe_idcategoria", categoria);
+        rexistro.put("pe_idproduto", produto);
+        rexistro.put("pe_cantidade", cantidade);
+        rexistro.put("pe_enderezoenvio", enderezo);
+        rexistro.put("pe_cidadeenvio", cidade);
+        rexistro.put("pe_codpostalenvio", codpostal);
 
-        // engadimos valores ás columnas
-        rexistro.put("us_nome", nome);
-        rexistro.put("us_apelidos", apelidos);
-        rexistro.put("us_email", email);
-        rexistro.put("us_usuario", usuario);
-        rexistro.put("us_contrasinal", contrasinal);
-        rexistro.put("us_tipo", tipo);
-
-        // gravamos na BD, que nos devolve o _id do rexistro ou -1 se hai erro
-        long codigo = sqlLiteDB.insert(TABOA_USUARIOS, null, rexistro);
+        long codigo = sqlLiteDB.insert(TABOA_PEDIDOS, null, rexistro);
 
         return codigo;
+
     }
+
+    public ArrayList<Pedido> getPedidosCliente(String tipo, long idCliente) {
+
+        ArrayList<Pedido> retorno = new ArrayList<Pedido>();
+
+        Cursor cursor = sqlLiteDB.rawQuery("select pe._id, pe_estado, pe_cantidade, pr._id, pr_produto, pe_enderezoenvio, pe_cidadeenvio, pe_codpostalenvio" +
+                " from pedidos pe left join produtos pr on pe_idcategoria=pr_idcategoria and pe_idproduto=pr_idproduto" +
+                " where pe_idcliente=? and pe_estado=?", new String[]{String.valueOf(idCliente), tipo});
+
+
+        if (cursor.moveToFirst()) {                // Se non ten datos xa non entra
+            while (!cursor.isAfterLast()) {     // Quédase no bucle ata que remata de percorrer o cursor. Fixarse que leva un ! (not) diante
+                Pedido aux = new Pedido(cursor.getLong(0), cursor.getString(1), idCliente,cursor.getInt(2),
+                        cursor.getLong(3), cursor.getString(4), cursor.getString(5), cursor.getString(6),cursor.getString(7));
+
+                retorno.add(aux);
+                cursor.moveToNext();
+            }
+        }
+
+        return retorno;
+    }
+
+
     public void abrirBD(){
         if (sqlLiteDB==null || !sqlLiteDB.isOpen()){
             sqlLiteDB = sInstance.getWritableDatabase();

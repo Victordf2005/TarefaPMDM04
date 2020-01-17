@@ -10,5 +10,6 @@
     <color name="negro">#000</color>
     <color name="azul">#00f</color>
     <color name="grisClaro">#eee</color>
+    <color name="plum">#dda0dd</color>
 
 </resources>

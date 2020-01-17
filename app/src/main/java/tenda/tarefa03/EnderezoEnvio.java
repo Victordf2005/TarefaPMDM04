@@ -10,9 +10,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import BaseDatos.BDTendaVDF;
+
 
 public class EnderezoEnvio extends AppCompatActivity {
 
+    private BDTendaVDF baseDatos;
 
     private void xestionarEventos(){
 
@@ -34,18 +37,21 @@ public class EnderezoEnvio extends AppCompatActivity {
 
                 }else {
 
-                    // Amosar datos do pedido
+                    //gravar pedido
                     Intent intent1 = getIntent();
-                    String textoPedido = "Datos do pedido:"
-                            + "\nCategoría: " + intent1.getExtras().getString(FacerPedido.CATEGORIA)
-                            + "\nProduto..: " + intent1.getExtras().getString(FacerPedido.PRODUTO)
-                            + "\nCantidade: " + intent1.getExtras().getString(FacerPedido.CANTIDADE)
-                            + "\n\nEnderezo de envío:"
-                            + "\n" + ((EditText) findViewById(R.id.etEnderezo)).getText().toString()
-                            + "\n" + ((EditText) findViewById(R.id.etCodPostal)).getText().toString()
-                            + " " + ((EditText) findViewById(R.id.etCidade)).getText().toString();
+                    long resultado = baseDatos.gravarPedido("P",Integer.parseInt(intent1.getExtras().getString("id_cliente")),
+                            Integer.parseInt(intent1.getExtras().getString(FacerPedido.CATEGORIA)),
+                            Integer.parseInt(intent1.getExtras().getString(FacerPedido.PRODUTO)),
+                            Integer.parseInt(intent1.getExtras().getString(FacerPedido.CANTIDADE)),
+                            ((EditText) findViewById(R.id.etEnderezo)).getText().toString(),
+                            ((EditText) findViewById(R.id.etCidade)).getText().toString(),
+                            ((EditText) findViewById(R.id.etCodPostal)).getText().toString());
 
-                    Toast.makeText(getApplicationContext(), textoPedido, Toast.LENGTH_LONG).show();
+                    if (resultado > 0) {
+                        Toast.makeText(getApplicationContext(), "Pedido gravado", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Produciuse un erro. O pedido NON FOI GRAVADO", Toast.LENGTH_LONG).show();
+                    }
 
                     // Esperar unos segundos a pechar a activity para permitir ver a mensaxe Toast
                     Handler h = new Handler();
@@ -66,6 +72,37 @@ public class EnderezoEnvio extends AppCompatActivity {
         });
 
     }
+
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        if (baseDatos == null) {
+            // Abrimos a base de datos para escritura
+            try {
+                baseDatos = BDTendaVDF.getInstance(getApplicationContext());
+                baseDatos.abrirBD();
+            }
+            catch (Exception erro) {
+                // Erro tratando de abrir a BD
+                Toast.makeText(getApplicationContext(), "Erro tratando de acceder á base de datos: " + erro.toString(), Toast.LENGTH_LONG).show();
+                finish();
+            }
+        }
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+
+        if (baseDatos != null){
+            // Pechamos a base de datos.
+            baseDatos.pecharBD();
+            baseDatos=null;
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

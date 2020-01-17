@@ -16,7 +16,7 @@ import BaseDatos.Usuario;
 public class Cliente extends AppCompatActivity {
 
     private BDTendaVDF baseDatos;
-    private Usuario usuario;
+    private Usuario cliente;
 
     private void xestionarEventos(){
 
@@ -29,6 +29,9 @@ public class Cliente extends AppCompatActivity {
 
                     //crear activity e lanzala
                     Intent intent = new Intent();
+                    intent.putExtra("id_cliente", cliente.getCodigo());
+                    intent.putExtra("nome_cliente", cliente.getNome());
+                    intent.putExtra("apelidos_cliente", cliente.getApelidos());
                     intent.setClassName(getApplicationContext(), "tenda.tarefa03.FacerPedido");
                     startActivity(intent);
             }
@@ -43,6 +46,7 @@ public class Cliente extends AppCompatActivity {
 
                 //crear activity e lanzala
                 Intent intent = new Intent();
+                intent.putExtra("id_cliente", cliente.getCodigo());
                 intent.setClassName(getApplicationContext(), "tenda.tarefa03.VerPedidos");
                 startActivity(intent);
             }
@@ -78,9 +82,9 @@ public class Cliente extends AppCompatActivity {
 
     private void buscarDatosCliente() {
         Intent intent1 = getIntent();
-        usuario = baseDatos.getUsuario(intent1.getExtras().getString(MainActivity.USUARIO),null, true);
+        cliente = baseDatos.getUsuario(intent1.getExtras().getString(MainActivity.USUARIO),null, true);
         TextView lblCliente = findViewById(R.id.tvNomeCliente);
-        lblCliente.setText(usuario.getNome() + "\n" + usuario.getApelidos());
+        lblCliente.setText(cliente.getNome() + "\n" + cliente.getApelidos());
     }
 
 

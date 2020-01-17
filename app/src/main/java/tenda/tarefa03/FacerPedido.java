@@ -1,5 +1,3 @@
-// VERSION DESENVOLVIDA POLO PROFESOR
-
 package tenda.tarefa03;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 //TODO: Facer que se habilite e inhabilite o boton seguinte de xeito correcto
 public class FacerPedido extends AppCompatActivity {
@@ -209,9 +208,10 @@ public class FacerPedido extends AppCompatActivity {
 
                 //crear activity
                 Intent intent = new Intent();
-                intent.setClassName(getApplicationContext(), "EnderezoEnvio");
+                intent.setClassName(getApplicationContext(), "tenda.tarefa03.EnderezoEnvio");
 
                 // Pasámoslle á activity os datos selecionados
+                intent.putExtras(getIntent().getExtras());
                 intent.putExtra(CATEGORIA, ((Spinner) findViewById(R.id.spnCategoria)).getSelectedItem().toString());
                 intent.putExtra(PRODUTO, ((Spinner) findViewById(R.id.spnProduto)).getSelectedItem().toString());
                 intent.putExtra(CANTIDADE, ((Spinner) findViewById(R.id.spnCantidade)).getSelectedItem().toString());
@@ -247,6 +247,17 @@ public class FacerPedido extends AppCompatActivity {
         Button btSeguinte = findViewById(R.id.btSeguinte);
         btSeguinte.setEnabled(siNon);
     }
+
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        Intent intent1 = getIntent();
+        TextView lblCliente = findViewById(R.id.tvNomeCliente);
+        lblCliente.setText(intent1.getExtras().getString("nome_cliente") + "\n" + intent1.getExtras().get("apelidos_cliente"));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 

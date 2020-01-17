@@ -104,6 +104,8 @@ public class MainActivity extends AppCompatActivity {
                 + BDTendaVDF.NOME_BD;
         File file = new File(bddestino);
 
+        //if (file.exists()) {file.delete();}
+
         if (!file.exists()) {
 
             // A BD non existe no cartafol de destino, podemos copiala
@@ -144,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 baseDatos = BDTendaVDF.getInstance(getApplicationContext());
                 baseDatos.abrirBD();
+                Toast.makeText(getApplicationContext(), "Pedidos: " + baseDatos.numPedidos(),Toast.LENGTH_LONG).show();
             }
             catch (Exception erro) {
                 // Erro tratando de abrir a BD

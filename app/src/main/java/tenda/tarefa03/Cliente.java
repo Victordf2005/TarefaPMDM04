@@ -29,7 +29,7 @@ public class Cliente extends AppCompatActivity {
 
                     //crear activity e lanzala
                     Intent intent = new Intent();
-                    intent.putExtra("id_cliente", cliente.getCodigo());
+                    intent.putExtra("id_cliente", String.valueOf(cliente.getCodigo()));
                     intent.putExtra("nome_cliente", cliente.getNome());
                     intent.putExtra("apelidos_cliente", cliente.getApelidos());
                     intent.setClassName(getApplicationContext(), "tenda.tarefa03.FacerPedido");
@@ -46,7 +46,9 @@ public class Cliente extends AppCompatActivity {
 
                 //crear activity e lanzala
                 Intent intent = new Intent();
-                intent.putExtra("id_cliente", cliente.getCodigo());
+                intent.putExtra("id_cliente", String.valueOf(cliente.getCodigo()));
+                intent.putExtra("nome_cliente", cliente.getNome());
+                intent.putExtra("apelidos_cliente", cliente.getApelidos());
                 intent.setClassName(getApplicationContext(), "tenda.tarefa03.VerPedidos");
                 startActivity(intent);
             }
@@ -61,6 +63,9 @@ public class Cliente extends AppCompatActivity {
 
                 //crear activity e lanzala
                 Intent intent = new Intent();
+                intent.putExtra("id_cliente", String.valueOf(cliente.getCodigo()));
+                intent.putExtra("nome_cliente", cliente.getNome());
+                intent.putExtra("apelidos_cliente", cliente.getApelidos());
                 intent.setClassName(getApplicationContext(), "tenda.tarefa03.VerCompras");
                 startActivity(intent);
             }

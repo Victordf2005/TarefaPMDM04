@@ -61,12 +61,16 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvwRecycleView"
+
+    <androidx.recyclerview.widget.RecyclerView
+
+        android:id="@+id/rvwPedidosCliente"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fondoTitulo" />
+        app:layout_constraintTop_toBottomOf="@id/fondoTitulo"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -24,10 +26,19 @@ public class VerPedidos extends AppCompatActivity {
 
         RecyclerViewAdapter_Pedidos recycleAdapter = new RecyclerViewAdapter_Pedidos(pedidos);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        RecyclerView recyclerView = findViewById(R.id.rvwRecycleView);
+        RecyclerView recyclerView = findViewById(R.id.rvwPedidosCliente);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(recycleAdapter);
     }
+
+    private void amosarDatosCliente() {
+        Intent intent1 = getIntent();
+        TextView lblCliente = findViewById(R.id.tvNomeCliente);
+        String texto = intent1.getExtras().getString("nome_cliente") +
+                "\n" + intent1.getExtras().getString("apelidos_cliente");
+        lblCliente.setText(texto);
+    }
+/*
 
     @Override
     public void onStart(){
@@ -39,7 +50,10 @@ public class VerPedidos extends AppCompatActivity {
                 baseDatos = BDTendaVDF.getInstance(getApplicationContext());
                 baseDatos.abrirBD();
 
-                pedidos = baseDatos.getPedidosCliente("P", Long.parseLong(getIntent().getExtras().getString("id_cliente")));
+                amosarDatosCliente();
+                pedidos = baseDatos.getPedidosCliente("P", getIntent().getExtras().getString("id_cliente"));
+
+                inicializarRecycleView();
             }
             catch (Exception erro) {
                 // Erro tratando de abrir a BD
@@ -59,14 +73,30 @@ public class VerPedidos extends AppCompatActivity {
             baseDatos=null;
         }
     }
+*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ver_pedidos);
 
-        inicializarRecycleView();
+        if (baseDatos == null) {
+            // Abrimos a base de datos para escritura
+            try {
+                baseDatos = BDTendaVDF.getInstance(getApplicationContext());
+                baseDatos.abrirBD();
 
+                amosarDatosCliente();
+                pedidos = baseDatos.getPedidosCliente("P", getIntent().getExtras().getString("id_cliente"));
+
+                inicializarRecycleView();
+            }
+            catch (Exception erro) {
+                // Erro tratando de abrir a BD
+                Toast.makeText(getApplicationContext(), "Erro tratando de acceder á base de datos: " + erro.toString(), Toast.LENGTH_LONG).show();
+                finish();
+            }
+        }
 
     }
 }

@@ -13,13 +13,14 @@ import java.util.ArrayList;
 import BaseDatos.Pedido;
 import tenda.tarefa03.R;
 
-public class RecyclerViewAdapter_Pedidos extends RecyclerView.Adapter {
+public class RecyclerViewAdapter_Admin extends RecyclerView.Adapter {
 
-    private ArrayList<Pedido> pedidos;
+    private ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
 
-    public RecyclerViewAdapter_Pedidos(ArrayList<Pedido> pedidos){
+    public RecyclerViewAdapter_Admin(ArrayList<Pedido> pedidos){
         this.pedidos = pedidos;
     }
+
 
     @NonNull
     @Override
@@ -27,7 +28,7 @@ public class RecyclerViewAdapter_Pedidos extends RecyclerView.Adapter {
 
         LayoutInflater mInflater = (LayoutInflater) viewGroup.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View v = mInflater.inflate(R.layout.activity_ver_pedidos_card,viewGroup,false);
+        View v = mInflater.inflate(R.layout.activity_administrador_card,viewGroup,false);
         RecyclerView.ViewHolder viewHolder = new ViewHolder_Pedidos(v);
 
         return viewHolder;
@@ -36,7 +37,8 @@ public class RecyclerViewAdapter_Pedidos extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
-        ViewHolder_Pedidos vhPedidos = (ViewHolder_Pedidos) holder;
+        ViewHolder_Admin vhPedidos = (ViewHolder_Admin) holder;
+        vhPedidos.tvCliente.setText(String.valueOf(pedidos.get(position).getIdCliente()));
         vhPedidos.tvInfoProduto.setText(pedidos.get(position).getCantidade() + "\n" + pedidos.get(position).getProduto());
         vhPedidos.tvInfoEnderezo.setText(pedidos.get(position).getEnderezo() + "\n" + pedidos.get(position).getCodpostal() + " " + pedidos.get(position).getCidade());
     }

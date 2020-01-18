@@ -16,15 +16,30 @@
         android:layout_height="wrap_content">
 
         <TextView
+            android:id="@+id/tvCliente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:textColor="@color/negro"
+            android:text="Info produto"
+            android:textSize="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
             android:id="@+id/tvInfoProduto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
-            android:text="Info produto"
             android:textColor="@color/negro"
+            android:text="Info produto"
             android:textSize="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

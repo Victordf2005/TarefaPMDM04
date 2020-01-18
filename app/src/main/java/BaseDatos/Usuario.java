@@ -2,7 +2,7 @@ package BaseDatos;
 
 public class Usuario {
 
-    private int codigo = 0;
+    private long codigo = 0;
     private String nome = "";
     private String apelidos = "";
     private String email = "";
@@ -14,7 +14,7 @@ public class Usuario {
     public Usuario(){}
 
     // construtor con parámetros
-    public Usuario(int codigo, String nome, String apelidos, String email, String usuario, String contrasinal, String tipo) {
+    public Usuario(long codigo, String nome, String apelidos, String email, String usuario, String contrasinal, String tipo) {
         this.codigo = codigo;
         this.nome = nome;
         this.apelidos = apelidos;

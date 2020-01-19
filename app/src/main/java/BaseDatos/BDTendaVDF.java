@@ -14,6 +14,7 @@ public class BDTendaVDF  extends SQLiteOpenHelper {
     public final static int VERSION_BD = 1;
     public final static String TABOA_USUARIOS = "usuarios";
     public final static String TABOA_PEDIDOS = "pedidos";
+    public final static String TABOA_PRODUTOS = "produtos";
 
     private static BDTendaVDF sInstance;
     private SQLiteDatabase sqlLiteDB;
@@ -31,13 +32,14 @@ public class BDTendaVDF  extends SQLiteOpenHelper {
         return sInstance;
     }
 
-    // Método para averiguar se xa hai un usuario rexistrado
-    public boolean existeUsuario(String usuario) {
+    // Método para averiguar se xa hai un usuario rexistrado co mesmo id de usuario
+    public Boolean existeUsuario(String usuario) {
 
-        // Comprobamos se o usuario xa existe na base de datos
-        Cursor consulta = sqlLiteDB.rawQuery("select * from " + TABOA_USUARIOS + " where us_usuario= ?", new String[] {usuario});
+        // Buscamos rexistros con ese id de usuario
+        Cursor consulta = sqlLiteDB.rawQuery("select * from " + TABOA_USUARIOS + " where us_usuario=?", new String[] {usuario});
 
-        return consulta.getCount() > 0;
+        // Devolvemos se ten rexistros
+        return (consulta.getCount() > 0);
     }
 
     public int numUsuariosRexistrados () {
@@ -49,7 +51,7 @@ public class BDTendaVDF  extends SQLiteOpenHelper {
     }
 
     public int numPedidos() {
-        Cursor consulta = sqlLiteDB.rawQuery("select * from pedidos", new String[] {});
+        Cursor consulta = sqlLiteDB.rawQuery("select * from " + TABOA_PEDIDOS, new String[] {});
         return consulta.getCount();
     }
 
@@ -129,12 +131,12 @@ public class BDTendaVDF  extends SQLiteOpenHelper {
         if (idCliente.equals("")) {
             // Buscamos pedidos de todos os clientes
             cursor = sqlLiteDB.rawQuery("select pe._id, pe_estado, pe_cantidade, pr._id, pr_produto, pe_enderezoenvio, pe_cidadeenvio, pe_codpostalenvio, pe_idcliente" +
-                    " from pedidos pe left join produtos pr on pe_idcategoria=pr_idcategoria and pe_idproduto=pr_idproduto" +
+                    " from " + TABOA_PEDIDOS + " pe left join " + TABOA_PRODUTOS + " pr on pe_idcategoria=pr_idcategoria and pe_idproduto=pr_idproduto" +
                     " where pe_estado=?", new String[]{tipo});
         } else{
             // Buscamos pedidos dun cliente determinado
             cursor = sqlLiteDB.rawQuery("select pe._id, pe_estado, pe_cantidade, pr._id, pr_produto, pe_enderezoenvio, pe_cidadeenvio, pe_codpostalenvio, pe_idcliente" +
-                    " from pedidos pe left join produtos pr on pe_idcategoria=pr_idcategoria and pe_idproduto=pr_idproduto" +
+                    " from \" + TABOA_PEDIDOS + \" pe left join \" + TABOA_PRODUTOS + \" pr on pe_idcategoria=pr_idcategoria and pe_idproduto=pr_idproduto" +
                     " where pe_idcliente=? and pe_estado=?", new String[]{idCliente, tipo});
         }
 
@@ -149,6 +151,19 @@ public class BDTendaVDF  extends SQLiteOpenHelper {
         }
 
         return retorno;
+    }
+
+    public int actualizarEstadoPedido(long numPedido, String estado) {
+
+        String strNumPedido = String.valueOf(numPedido);
+
+        ContentValues rexistro = new ContentValues();
+        rexistro.put("pe_estado",estado);
+        String condicionWhere = "_id=?";
+        String[] parametros = new String[]{strNumPedido};
+        int rexistrosafectados = sqlLiteDB.update(TABOA_PEDIDOS,rexistro,condicionWhere,parametros);
+
+        return rexistrosafectados;
     }
 
 

@@ -14,9 +14,9 @@ import java.util.ArrayList;
 
 import BaseDatos.BDTendaVDF;
 import BaseDatos.Pedido;
-import adaptadores.RecyclerViewAdapter_AdminAR;
+import adaptadores.RecyclerViewAdapter_AdminVer;
 
-public class Administrador_VerPedidosAR extends AppCompatActivity {
+public class Administrador_VerPedidosVer extends AppCompatActivity {
 
     private BDTendaVDF baseDatos;
 
@@ -25,12 +25,13 @@ public class Administrador_VerPedidosAR extends AppCompatActivity {
 
     private void inicializarRecycleView(){
 
-        RecyclerViewAdapter_AdminAR recycleAdapter = new RecyclerViewAdapter_AdminAR(pedidos);
+        RecyclerViewAdapter_AdminVer recycleAdapter = new RecyclerViewAdapter_AdminVer(pedidos);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        RecyclerView recyclerView = findViewById(R.id.rvPedidosAdministradorAR);
+        RecyclerView recyclerView = findViewById(R.id.rvPedidosAdministradorVer);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(recycleAdapter);
     }
+
 
     @Override
     public void onStart(){
@@ -69,10 +70,15 @@ public class Administrador_VerPedidosAR extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_administrador__ver_pedidosar);
+        setContentView(R.layout.activity_administrador__ver_pedidosver);
 
-        Toolbar barra = findViewById(R.id.toolbarAdminPedAR);
-        barra.setTitle("Ped. en trámite");
+        Toolbar barra = findViewById(R.id.toolbarAdminPedVer);
+
+        if (getIntent().getExtras().getString("Tipo").equals("A")) {
+            barra.setTitle("Ped. aceptados");
+        } else {
+            barra.setTitle("Ped. rexeitados");
+        }
         setSupportActionBar(barra);
     }
 

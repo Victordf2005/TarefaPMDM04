@@ -14,16 +14,12 @@ public class ViewHolder_AdminVer extends RecyclerView.ViewHolder {
     public TextView tvCliente;
     public TextView tvInfoProduto;
     public TextView tvInfoEnderezo;
-    public Button btAceptar;
-    public Button btRexeitar;
 
     public ViewHolder_AdminVer(@NonNull View itemView) {
         super(itemView);
 
-        tvCliente = itemView.findViewById(R.id.tvAdmCliente);
-        tvInfoProduto = itemView.findViewById(R.id.tvInfoAdmProduto);
-        tvInfoEnderezo = itemView.findViewById(R.id.tvInfoAdmEnderezo);
-        btAceptar = itemView.findViewById(R.id.btAceptarPedido);
-        btRexeitar = itemView.findViewById(R.id.btRexeitarPedido);
+        tvCliente = itemView.findViewById(R.id.tvAdmClienteVer);
+        tvInfoProduto = itemView.findViewById(R.id.tvInfoAdmProdutoVer);
+        tvInfoEnderezo = itemView.findViewById(R.id.tvInfoAdmEnderezoVer);
     }
 }

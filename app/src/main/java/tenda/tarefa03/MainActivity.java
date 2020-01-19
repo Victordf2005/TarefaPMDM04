@@ -146,7 +146,6 @@ public class MainActivity extends AppCompatActivity {
             try {
                 baseDatos = BDTendaVDF.getInstance(getApplicationContext());
                 baseDatos.abrirBD();
-                Toast.makeText(getApplicationContext(), "Pedidos: " + baseDatos.numPedidos(),Toast.LENGTH_LONG).show();
             }
             catch (Exception erro) {
                 // Erro tratando de abrir a BD

@@ -38,7 +38,9 @@ public class RecyclerViewAdapter_AdminAR extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
         ViewHolder_AdminAR vhPedidos = (ViewHolder_AdminAR) holder;
-        vhPedidos.tvCliente.setText("Cliente " + String.valueOf(pedidos.get(position).getIdCliente()));
+
+        vhPedidos.itemView.setTag(pedidos.get(position));
+        vhPedidos.tvCliente.setText("Cliente " + String.valueOf(pedidos.get(position).getIdCliente()) + "\nN.Ped.: " + pedidos.get(position).getCodigo());
         vhPedidos.tvInfoProduto.setText("Cant. " + pedidos.get(position).getCantidade() + "\n" + "Prod. :" + pedidos.get(position).getProduto());
         vhPedidos.tvInfoEnderezo.setText("Envíar a: \n" + pedidos.get(position).getEnderezo() + "\n" + pedidos.get(position).getCodpostal() + " " + pedidos.get(position).getCidade());
     }

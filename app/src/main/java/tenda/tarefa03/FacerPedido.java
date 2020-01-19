@@ -19,7 +19,9 @@ import android.widget.TextView;
 public class FacerPedido extends AppCompatActivity {
 
     //Nomes das variables en SaveInstanceState
+    public final static String IDCATEGORIA = "idcategoria";
     public final static String CATEGORIA = "categoria";
+    public final static String IDPRODUTO = "idproduto";
     public final static String PRODUTO = "produto";
     public final static String CANTIDADE = "cantidade";
 
@@ -215,7 +217,9 @@ public class FacerPedido extends AppCompatActivity {
 
                 // Pasámoslle á activity os datos selecionados
                 intent.putExtras(getIntent().getExtras());
+                intent.putExtra(IDCATEGORIA, String.valueOf(((Spinner) findViewById(R.id.spnCategoria)).getSelectedItemId()));
                 intent.putExtra(CATEGORIA, ((Spinner) findViewById(R.id.spnCategoria)).getSelectedItem().toString());
+                intent.putExtra(IDPRODUTO, String.valueOf(((Spinner) findViewById(R.id.spnProduto)).getSelectedItemId()));
                 intent.putExtra(PRODUTO, ((Spinner) findViewById(R.id.spnProduto)).getSelectedItem().toString());
                 intent.putExtra(CANTIDADE, ((Spinner) findViewById(R.id.spnCantidade)).getSelectedItem().toString());
 

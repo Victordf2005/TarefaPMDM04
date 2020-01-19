@@ -51,7 +51,7 @@ public class EnderezoEnvio extends AppCompatActivity {
 
                     String textoPedido = "Datos do pedido:"
                             + "\nCategoría: " + intent1.getExtras().getString(FacerPedido.CATEGORIA)
-                            + "\nProduto..: " + intent1.getExtras().getString(FacerPedido.PRODUTO)
+                            + "\nProduto..: " +  intent1.getExtras().getString(FacerPedido.PRODUTO)
                             + "\nCantidade: " + intent1.getExtras().getString(FacerPedido.CANTIDADE)
                             + "\n\nEnderezo de envío:"
                             + "\n" + ((EditText) findViewById(R.id.etEnderezo)).getText().toString()
@@ -59,7 +59,7 @@ public class EnderezoEnvio extends AppCompatActivity {
                             + " " + ((EditText) findViewById(R.id.etCidade)).getText().toString()
                             + "\n\n Pulse 'OK' para aceptar e gardar o pedido";
 
-                    dialogo.setMessage("INFO PEDIDO");
+                    dialogo.setMessage(textoPedido);
 
                     dialogo.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                         @Override
@@ -88,9 +88,10 @@ public class EnderezoEnvio extends AppCompatActivity {
         //gravar pedido
         Intent intent1 = getIntent();
 
-        long resultado = baseDatos.gravarPedido("P",Integer.parseInt(intent1.getExtras().getString("id_cliente")),
-                Integer.parseInt(intent1.getExtras().getString(FacerPedido.CATEGORIA)),
-                Integer.parseInt(intent1.getExtras().getString(FacerPedido.PRODUTO)),
+        long resultado = baseDatos.gravarPedido("P",
+                Integer.parseInt(intent1.getExtras().getString("id_cliente")),
+                Integer.parseInt(intent1.getExtras().getString(FacerPedido.IDCATEGORIA)),
+                Integer.parseInt(intent1.getExtras().getString(FacerPedido.IDPRODUTO) ),
                 Integer.parseInt(intent1.getExtras().getString(FacerPedido.CANTIDADE)),
                 ((EditText) findViewById(R.id.etEnderezo)).getText().toString(),
                 ((EditText) findViewById(R.id.etCidade)).getText().toString(),

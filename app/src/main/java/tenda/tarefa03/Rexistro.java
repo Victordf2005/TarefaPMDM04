@@ -17,7 +17,7 @@ public class Rexistro extends AppCompatActivity {
     private BDTendaVDF baseDatos;
 
     private void xestionarEventos(){
-
+        // VDF
         // Botón para iniciar sesión
         Button btRexistrarse = findViewById(R.id.btRexistrar);
         btRexistrarse.setOnClickListener(new View.OnClickListener() {
@@ -45,7 +45,6 @@ public class Rexistro extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Xa hai un rexistro con usuario '" + usuario + "'; non se pode rexistrar este novo usuario.", Toast.LENGTH_LONG).show();
 
         } else {
-
             // Podemos rexistrar o novo usuario, recollemos o resto de datos do layout
             EditText etNome = findViewById(R.id.etNome);
             String nome = etNome.getText().toString();

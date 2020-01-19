@@ -9,9 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Administrador_VerPedidosVer"></activity>
-        <activity android:name=".Administrdor_VerPedidosVer" />
-        <activity android:name=".Administrador_VerPedidosAR" />
+        <activity
+            android:name=".Administrador_VerPedidosVer"
+            android:screenOrientation="fullSensor" />
+        <activity
+            android:name=".Administrador_VerPedidosAR"
+            android:screenOrientation="fullSensor"/>
         <activity
             android:name=".Rexistro"
             android:screenOrientation="fullSensor" />

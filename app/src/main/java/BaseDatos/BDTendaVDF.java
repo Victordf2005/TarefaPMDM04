@@ -108,6 +108,7 @@ public class BDTendaVDF  extends SQLiteOpenHelper {
     public long gravarPedido (String estado, int idCliente, int categoria, int produto, int cantidade, String enderezo, String cidade, String codpostal) {
 
         ContentValues rexistro = new ContentValues();
+
         rexistro.put("pe_estado", estado);
         rexistro.put("pe_idcliente", idCliente);
         rexistro.put("pe_idcategoria", categoria);
@@ -136,7 +137,7 @@ public class BDTendaVDF  extends SQLiteOpenHelper {
         } else{
             // Buscamos pedidos dun cliente determinado
             cursor = sqlLiteDB.rawQuery("select pe._id, pe_estado, pe_cantidade, pr._id, pr_produto, pe_enderezoenvio, pe_cidadeenvio, pe_codpostalenvio, pe_idcliente" +
-                    " from \" + TABOA_PEDIDOS + \" pe left join \" + TABOA_PRODUTOS + \" pr on pe_idcategoria=pr_idcategoria and pe_idproduto=pr_idproduto" +
+                    " from " + TABOA_PEDIDOS + " pe left join " + TABOA_PRODUTOS + " pr on pe_idcategoria=pr_idcategoria and pe_idproduto=pr_idproduto" +
                     " where pe_idcliente=? and pe_estado=?", new String[]{idCliente, tipo});
         }
 

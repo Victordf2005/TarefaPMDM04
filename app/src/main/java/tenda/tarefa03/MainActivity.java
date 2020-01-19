@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
+/*
     @Override
     public void onStop(){
         super.onStop();
@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
             baseDatos.pecharBD();
             baseDatos=null;
         }
-    }
+    }*/
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 

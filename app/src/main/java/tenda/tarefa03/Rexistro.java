@@ -46,19 +46,19 @@ public class Rexistro extends AppCompatActivity {
 
         } else {
             // Podemos rexistrar o novo usuario, recollemos o resto de datos do layout
-            EditText etNome = findViewById(R.id.etNome);
-            String nome = etNome.getText().toString();
-            String apelidos = ((EditText) findViewById(R.id.etApelidos)).getText().toString();
-            String email = ((EditText) findViewById(R.id.etEmail)).getText().toString();
-            String contrasinal = ((EditText) findViewById(R.id.etContrasinalRexistro)).getText().toString();
             Spinner spnTipoUsuario = findViewById(R.id.spnTipo);
             String tipo = spnTipoUsuario.getSelectedItem().toString().substring(0, 1);   // O código de tipo é a primeira letra
 
-            Long resultado = baseDatos.engadirUsuario(nome, apelidos, email, usuario, contrasinal, tipo);
+            Long resultado = baseDatos.engadirUsuario(((EditText) findViewById(R.id.etNome)).getText().toString(),
+                    ((EditText) findViewById(R.id.etApelidos)).getText().toString(),
+                    ((EditText) findViewById(R.id.etEmail)).getText().toString(),
+                    ((EditText) findViewById(R.id.etUsuarioRexistro)).getText().toString(),
+                    ((EditText) findViewById(R.id.etContrasinalRexistro)).getText().toString(),
+                    tipo);
 
             if (resultado > 0) {
 
-                // Datos gravadso correctamente
+                // Datos gravados correctamente
                 Toast.makeText(getApplicationContext(), "Datos gravados correctamewnte; código: " + resultado, Toast.LENGTH_LONG).show();
 
                 // Esperar unos segundos a pechar a activity para permitir ver a mensaxe Toast
@@ -78,9 +78,7 @@ public class Rexistro extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onStart(){
-        super.onStart();
+    private void abrirBaseDatos() {
 
         if (baseDatos == null) {
             // Abrimos a base de datos para escritura
@@ -97,6 +95,12 @@ public class Rexistro extends AppCompatActivity {
     }
 
     @Override
+    public void onStart(){
+        super.onStart();
+        abrirBaseDatos();
+    }
+
+    @Override
     public void onStop(){
         super.onStop();
 
@@ -106,7 +110,6 @@ public class Rexistro extends AppCompatActivity {
             baseDatos=null;
         }
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

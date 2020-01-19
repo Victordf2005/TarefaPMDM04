@@ -9,12 +9,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import tenda.tarefa03.R;
 
-public class ViewHolder_Pedidos extends RecyclerView.ViewHolder {
+public class ViewHolder_Compras extends RecyclerView.ViewHolder {
 
     public TextView tvInfoProduto;
     public TextView tvInfoEnderezo;
 
-    public ViewHolder_Pedidos(@NonNull View itemView) {
+    public ViewHolder_Compras(@NonNull View itemView) {
         super(itemView);
 
         tvInfoProduto = itemView.findViewById(R.id.tvInfoPedProduto);

@@ -8,7 +8,7 @@
     tools:context="tenda.tarefa03.Administrador">
 
 <androidx.appcompat.widget.Toolbar
-    android:id="@+id/toolbar"
+    android:id="@+id/toolbarAdmin"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/colorPrimary"
@@ -22,7 +22,7 @@
         android:id="@+id/Cabeceira"
         android:layout_width="match_parent"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
+        app:layout_constraintTop_toBottomOf="@id/toolbarAdmin">
 
         <ImageView
             android:id="@+id/ivAdmin"

@@ -32,8 +32,8 @@ public class Administrador extends AppCompatActivity {
     private void xestionarEventos(){
 
         // Botón para facer un novo pedido
-        Button btTramite = findViewById(R.id.btEnTramite);
-        btTramite.setOnClickListener(new View.OnClickListener() {
+        Button btnEnTramite = findViewById(R.id.btEnTramite);
+        btnEnTramite.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -42,8 +42,8 @@ public class Administrador extends AppCompatActivity {
         });
 
         // Botón para ver pedidos en trámite
-        Button btAceptados = findViewById(R.id.btAceptados);
-        btAceptados.setOnClickListener(new View.OnClickListener() {
+        Button btnAceptados = findViewById(R.id.btAceptados);
+        btnAceptados.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -52,24 +52,12 @@ public class Administrador extends AppCompatActivity {
         });
 
         // Botón para ver pedidos en trámite
-        Button btRexeitados = findViewById(R.id.btRexeitados);
-        btRexeitados.setOnClickListener(new View.OnClickListener() {
+        Button btnRexeitados = findViewById(R.id.btRexeitados);
+        btnRexeitados.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-
-            }
-        });
-
-
-        // Botón Sair
-        Button btnSair = findViewById(R.id.btSair);
-        btnSair.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // Destruir a activity;
-                finish();
+                verRexeitados();
             }
         });
 
@@ -80,7 +68,7 @@ public class Administrador extends AppCompatActivity {
         //crear activity e lanzala
         Intent intent = new Intent();
         intent.putExtra("Tipo", "P");
-        intent.setClassName(getApplicationContext(), "tenda.tarefa03.Administrador_VerPedidos");
+        intent.setClassName(getApplicationContext(), "tenda.tarefa03.Administrador_VerPedidosAR");
         startActivity(intent);
     }
 
@@ -89,7 +77,7 @@ public class Administrador extends AppCompatActivity {
         //crear activity e lanzala
         Intent intent = new Intent();
         intent.putExtra("Tipo", "A");
-        intent.setClassName(getApplicationContext(), "tenda.tarefa03.Administrador_VerPedidos");
+        intent.setClassName(getApplicationContext(), "tenda.tarefa03.Administrador_VerPedidosVer");
         startActivity(intent);
     }
 
@@ -98,7 +86,7 @@ public class Administrador extends AppCompatActivity {
         //crear activity e lanzala
         Intent intent = new Intent();
         intent.putExtra("Tipo", "R");
-        intent.setClassName(getApplicationContext(), "tenda.tarefa03.Administrador_VerPedidos");
+        intent.setClassName(getApplicationContext(), "tenda.tarefa03.Administrador_VerPedidosVer");
         startActivity(intent);
     }
 
@@ -141,7 +129,7 @@ public class Administrador extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_administrador);
 
-        Toolbar barra = findViewById(R.id.toolbar);
+        Toolbar barra = findViewById(R.id.toolbarAdmin);
         setSupportActionBar(barra);
 
         xestionarEventos();

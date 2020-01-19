@@ -6,12 +6,23 @@
     android:layout_height="match_parent"
     tools:context="tenda.tarefa03.VerPedidos">
 
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarCom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:elevation="4dp"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <LinearLayout
         style="@style/Cabeceira"
         android:id="@+id/Cabeceira"
         android:layout_width="match_parent"
         android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/toolbarCom">
 
         <ImageView
             android:id="@+id/ivCliente"
@@ -19,7 +30,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_weight="1"
             app:layout_constraintStart_toStartOf="parent"
@@ -39,6 +49,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/fondoTitulo"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -60,5 +71,17 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+
+        android:id="@+id/rvwPedidosCliente"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fondoTitulo"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

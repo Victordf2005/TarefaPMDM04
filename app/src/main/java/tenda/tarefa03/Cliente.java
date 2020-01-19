@@ -1,9 +1,12 @@
 package tenda.tarefa03;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,14 +29,7 @@ public class Cliente extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-
-                    //crear activity e lanzala
-                    Intent intent = new Intent();
-                    intent.putExtra("id_cliente", String.valueOf(cliente.getCodigo()));
-                    intent.putExtra("nome_cliente", cliente.getNome());
-                    intent.putExtra("apelidos_cliente", cliente.getApelidos());
-                    intent.setClassName(getApplicationContext(), "tenda.tarefa03.FacerPedido");
-                    startActivity(intent);
+                novoPedido();
             }
         });
 
@@ -43,14 +39,7 @@ public class Cliente extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-
-                //crear activity e lanzala
-                Intent intent = new Intent();
-                intent.putExtra("id_cliente", String.valueOf(cliente.getCodigo()));
-                intent.putExtra("nome_cliente", cliente.getNome());
-                intent.putExtra("apelidos_cliente", cliente.getApelidos());
-                intent.setClassName(getApplicationContext(), "tenda.tarefa03.VerPedidos");
-                startActivity(intent);
+                verPendentes();
             }
         });
 
@@ -60,14 +49,7 @@ public class Cliente extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-
-                //crear activity e lanzala
-                Intent intent = new Intent();
-                intent.putExtra("id_cliente", String.valueOf(cliente.getCodigo()));
-                intent.putExtra("nome_cliente", cliente.getNome());
-                intent.putExtra("apelidos_cliente", cliente.getApelidos());
-                intent.setClassName(getApplicationContext(), "tenda.tarefa03.VerCompras");
-                startActivity(intent);
+                verRealizados();
             }
         });
 
@@ -83,6 +65,39 @@ public class Cliente extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void novoPedido() {
+
+        //crear activity e lanzala
+        Intent intent = new Intent();
+        intent.putExtra("id_cliente", String.valueOf(cliente.getCodigo()));
+        intent.putExtra("nome_cliente", cliente.getNome());
+        intent.putExtra("apelidos_cliente", cliente.getApelidos());
+        intent.setClassName(getApplicationContext(), "tenda.tarefa03.FacerPedido");
+        startActivity(intent);
+    }
+
+    private void verPendentes() {
+
+        //crear activity e lanzala
+        Intent intent = new Intent();
+        intent.putExtra("id_cliente", String.valueOf(cliente.getCodigo()));
+        intent.putExtra("nome_cliente", cliente.getNome());
+        intent.putExtra("apelidos_cliente", cliente.getApelidos());
+        intent.setClassName(getApplicationContext(), "tenda.tarefa03.VerPedidos");
+        startActivity(intent);
+    }
+
+    private void verRealizados() {
+
+        //crear activity e lanzala
+        Intent intent = new Intent();
+        intent.putExtra("id_cliente", String.valueOf(cliente.getCodigo()));
+        intent.putExtra("nome_cliente", cliente.getNome());
+        intent.putExtra("apelidos_cliente", cliente.getApelidos());
+        intent.setClassName(getApplicationContext(), "tenda.tarefa03.VerCompras");
+        startActivity(intent);
     }
 
     private void buscarDatosCliente() {
@@ -131,8 +146,40 @@ public class Cliente extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cliente);
 
+        Toolbar barra = findViewById(R.id.toolbarCliente);
+        setSupportActionBar(barra);
+
         xestionarEventos();
 
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_cliente, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.mnuFacerPedido:
+                novoPedido();
+                return true;
+
+            case R.id.mnuVerPendentes:
+                verPendentes();
+                return true;
+
+            case R.id.mnuRealizados:
+                verRealizados();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

@@ -128,19 +128,19 @@ public class BDTendaVDF  extends SQLiteOpenHelper {
         Cursor cursor = null;
         if (idCliente.equals("")) {
             // Buscamos pedidos de todos os clientes
-            cursor = sqlLiteDB.rawQuery("select pe._id, pe_estado, pe_cantidade, pr._id, pr_produto, pe_enderezoenvio, pe_cidadeenvio, pe_codpostalenvio" +
+            cursor = sqlLiteDB.rawQuery("select pe._id, pe_estado, pe_cantidade, pr._id, pr_produto, pe_enderezoenvio, pe_cidadeenvio, pe_codpostalenvio, pe_idcliente" +
                     " from pedidos pe left join produtos pr on pe_idcategoria=pr_idcategoria and pe_idproduto=pr_idproduto" +
                     " where pe_estado=?", new String[]{tipo});
         } else{
             // Buscamos pedidos dun cliente determinado
-            cursor = sqlLiteDB.rawQuery("select pe._id, pe_estado, pe_cantidade, pr._id, pr_produto, pe_enderezoenvio, pe_cidadeenvio, pe_codpostalenvio" +
+            cursor = sqlLiteDB.rawQuery("select pe._id, pe_estado, pe_cantidade, pr._id, pr_produto, pe_enderezoenvio, pe_cidadeenvio, pe_codpostalenvio, pe_idcliente" +
                     " from pedidos pe left join produtos pr on pe_idcategoria=pr_idcategoria and pe_idproduto=pr_idproduto" +
                     " where pe_idcliente=? and pe_estado=?", new String[]{idCliente, tipo});
         }
 
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
-                Pedido aux = new Pedido(cursor.getLong(0), cursor.getString(1), Long.parseLong(idCliente), cursor.getInt(2),
+                Pedido aux = new Pedido(cursor.getLong(0), cursor.getString(1), cursor.getLong(8), cursor.getInt(2),
                         cursor.getLong(3), cursor.getString(4), cursor.getString(5), cursor.getString(6),cursor.getString(7));
 
                 retorno.add(aux);

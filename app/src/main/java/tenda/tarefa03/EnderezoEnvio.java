@@ -2,11 +2,14 @@ package tenda.tarefa03;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -150,10 +153,35 @@ public class EnderezoEnvio extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enderezo_envio);
 
+        Toolbar barra = findViewById(R.id.toolbarEnvio);
+        setSupportActionBar(barra);
+
         xestionarEventos();
 
         // Establecer a caixa enderezo como primeiro elemento en recibir o foco
         EditText et = findViewById(R.id.etEnderezo);
         et.requestFocus();
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_atras, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.mnuAtras:
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

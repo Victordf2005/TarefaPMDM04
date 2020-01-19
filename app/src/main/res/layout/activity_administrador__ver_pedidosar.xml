@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="tenda.tarefa03.Administrador_VerPedidos">
+    tools:context="tenda.tarefa03.Administrador_VerPedidosAR">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar2"
+        android:id="@+id/toolbarAdminPedAR"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
@@ -17,11 +17,11 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvPedidosAdministrador"
+            android:id="@+id/rvPedidosAdministradorAR"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar2" />
+            app:layout_constraintTop_toBottomOf="@id/toolbarAdminPedAR" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

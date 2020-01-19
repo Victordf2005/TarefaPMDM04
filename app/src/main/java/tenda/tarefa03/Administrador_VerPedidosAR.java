@@ -2,6 +2,8 @@ package tenda.tarefa03;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,12 +14,24 @@ import java.util.ArrayList;
 
 import BaseDatos.BDTendaVDF;
 import BaseDatos.Pedido;
+import adaptadores.RecyclerViewAdapter_AdminAR;
 
-public class Administrador_VerPedidos extends AppCompatActivity {
+public class Administrador_VerPedidosAR extends AppCompatActivity {
 
     private BDTendaVDF baseDatos;
 
     private ArrayList<Pedido> pedidos;
+
+
+    private void inicializarRecycleView(){
+
+        RecyclerViewAdapter_AdminAR recycleAdapter = new RecyclerViewAdapter_AdminAR(pedidos);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        RecyclerView recyclerView = findViewById(R.id.rvPedidosAdministradorAR);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(recycleAdapter);
+    }
+
 
     @Override
     public void onStart(){
@@ -31,6 +45,7 @@ public class Administrador_VerPedidos extends AppCompatActivity {
 
                 pedidos = baseDatos.getPedidosCliente(getIntent().getExtras().getString("Tipo"), "");
 
+                inicializarRecycleView();
             }
             catch (Exception erro) {
                 // Erro tratando de abrir a BD
@@ -55,9 +70,9 @@ public class Administrador_VerPedidos extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_administrador__ver_pedidos);
+        setContentView(R.layout.activity_administrador__ver_pedidosar);
 
-        Toolbar barra = findViewById(R.id.toolbar2);
+        Toolbar barra = findViewById(R.id.toolbarAdminPedAR);
         setSupportActionBar(barra);
     }
 
@@ -65,7 +80,7 @@ public class Administrador_VerPedidos extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_admin, menu);
+        getMenuInflater().inflate(R.menu.menu_atras, menu);
         return true;
     }
 

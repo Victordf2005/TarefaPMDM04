@@ -2,6 +2,7 @@
 
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
@@ -30,7 +31,6 @@
                 android:text="Info produto"
                 android:textColor="@color/negro"
                 android:textSize="12dp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -43,7 +43,6 @@
                 android:textColor="@color/negro"
                 android:text="Info produto"
                 android:textSize="12dp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/tvAdmCliente"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -56,34 +55,29 @@
                 android:text="Info Enderezo"
                 android:textColor="@color/negro"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/tvInfoAdmProduto"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 />
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <Button
+                android:id="@+id/btAceptarPedido"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Aceptar"
+                app:layout_constraintTop_toTopOf="@id/btRexeitarPedido"
+                app:layout_constraintEnd_toStartOf="@id/btRexeitarPedido"
+                />
+
+            <Button
+                android:id="@+id/btRexeitarPedido"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rexeitar"
+                app:layout_constraintTop_toBottomOf="@id/tvInfoAdmEnderezo"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/primeiraLinea">
+                />
 
-                <Button
-                    android:id="@+id/btAceptarPedido"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Aceptar"
-                    app:layout_constraintEnd_toStartOf="@id/btRexeitarPedido"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <Button
-                    android:id="@+id/btRexeitarPedido"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Rexeitar"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

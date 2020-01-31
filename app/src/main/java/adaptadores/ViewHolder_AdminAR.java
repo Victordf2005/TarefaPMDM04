@@ -1,5 +1,6 @@
 package adaptadores;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -10,11 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import BaseDatos.BDTendaVDF;
 import BaseDatos.Pedido;
+import tenda.tarefa03.Administrador_VerPedidosAR;
 import tenda.tarefa03.R;
+
 
 public class ViewHolder_AdminAR extends RecyclerView.ViewHolder {
 
-    public BDTendaVDF baseDatos;
     Pedido pedido;
 
     public TextView tvCliente;
@@ -35,8 +37,20 @@ public class ViewHolder_AdminAR extends RecyclerView.ViewHolder {
         btAceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pedido = (Pedido) v.getTag();
-                Toast.makeText(v.getContext(),"Aceptar elemento " + getAdapterPosition() + " da lista.\n Obxecto pedido: " + pedido,Toast.LENGTH_SHORT).show();
+
+                BDTendaVDF baseDatos = new BDTendaVDF(v.getContext());
+                baseDatos.abrirBD();
+
+                pedido = (Pedido) ViewHolder_AdminAR.super.itemView.getTag();
+                int rexistrosAfectados = baseDatos.actualizarEstadoPedido(pedido.getCodigo(), "A");     // Aceptar pedido
+
+                if (rexistrosAfectados == 1) {
+                    Toast.makeText(v.getContext(), "Pedido aceptado.", Toast.LENGTH_LONG).show();
+                    Administrador_VerPedidosAR.notificarItemRemoved(getAdapterPosition());
+                } else {
+                    Toast.makeText(v.getContext(), "Erro tratando de aceptar o pedido.", Toast.LENGTH_LONG).show();
+                }
+                baseDatos.pecharBD();
             }
         });
 
@@ -44,11 +58,22 @@ public class ViewHolder_AdminAR extends RecyclerView.ViewHolder {
         btRexeitar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pedido = (Pedido) v.getTag();
-                Toast.makeText(v.getContext(),"Rexeitar elemento " + getAdapterPosition() + " da lista.\n Obxecto pedido: " + pedido,Toast.LENGTH_SHORT).show();
+
+                BDTendaVDF baseDatos = new BDTendaVDF(v.getContext());
+                baseDatos.abrirBD();
+
+                pedido = (Pedido) ViewHolder_AdminAR.super.itemView.getTag();
+                int rexistrosAfectados = baseDatos.actualizarEstadoPedido(pedido.getCodigo(), "R");     // Aceptar pedido
+
+                if (rexistrosAfectados == 1) {
+                    Toast.makeText(v.getContext(), "Pedido rexeitado.", Toast.LENGTH_LONG).show();
+                    Administrador_VerPedidosAR.notificarItemRemoved(getAdapterPosition());
+                } else {
+                    Toast.makeText(v.getContext(), "Erro tratando de rexeitar o pedido.", Toast.LENGTH_LONG).show();
+                }
+                baseDatos.pecharBD();
             }
         });
     }
-
 
 }

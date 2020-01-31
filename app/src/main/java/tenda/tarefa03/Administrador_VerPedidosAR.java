@@ -22,14 +22,19 @@ public class Administrador_VerPedidosAR extends AppCompatActivity {
 
     private ArrayList<Pedido> pedidos;
 
+    private static RecyclerViewAdapter_AdminAR recyclerAdapter;
 
     private void inicializarRecycleView(){
 
-        RecyclerViewAdapter_AdminAR recycleAdapter = new RecyclerViewAdapter_AdminAR(pedidos);
+        recyclerAdapter = new RecyclerViewAdapter_AdminAR(pedidos);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         RecyclerView recyclerView = findViewById(R.id.rvPedidosAdministradorAR);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(recycleAdapter);
+        recyclerView.setAdapter(recyclerAdapter);
+    }
+
+    public static void notificarItemRemoved(int pos) {
+        recyclerAdapter.notifyItemRemoved(pos);
     }
 
     @Override

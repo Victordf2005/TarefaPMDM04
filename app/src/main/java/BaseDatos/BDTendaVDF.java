@@ -143,7 +143,7 @@ public class BDTendaVDF  extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
-                Pedido aux = new Pedido(cursor.getLong(0), cursor.getString(1), cursor.getLong(8), cursor.getInt(2),
+                Pedido aux = new Pedido(cursor.getInt(0), cursor.getString(1), cursor.getLong(8), cursor.getInt(2),
                         cursor.getLong(3), cursor.getString(4), cursor.getString(5), cursor.getString(6),cursor.getString(7));
 
                 retorno.add(aux);
@@ -156,15 +156,14 @@ public class BDTendaVDF  extends SQLiteOpenHelper {
 
     public int actualizarEstadoPedido(long numPedido, String estado) {
 
-        String strNumPedido = String.valueOf(numPedido);
-
         ContentValues rexistro = new ContentValues();
         rexistro.put("pe_estado",estado);
         String condicionWhere = "_id=?";
-        String[] parametros = new String[]{strNumPedido};
+        String[] parametros = new String[]{String.valueOf(numPedido)};
         int rexistrosafectados = sqlLiteDB.update(TABOA_PEDIDOS,rexistro,condicionWhere,parametros);
 
         return rexistrosafectados;
+
     }
 
 

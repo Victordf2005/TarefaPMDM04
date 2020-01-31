@@ -2,7 +2,7 @@ package BaseDatos;
 
 public class Pedido {
 
-    private long codigo = 0;
+    private int codigo = 0;
     private String estado = "";
     private long idCliente = 0;
     private int cantidade = 0;
@@ -16,7 +16,7 @@ public class Pedido {
     public Pedido(){}
 
     // construtor con parámetros
-    public Pedido(long codigo, String estado, long idCliente, int cantidade, long idProduto, String produto, String enderezo, String cidade, String codpostal) {
+    public Pedido(int codigo, String estado, long idCliente, int cantidade, long idProduto, String produto, String enderezo, String cidade, String codpostal) {
         this.codigo = codigo;
         this.estado = estado;
         this.idCliente = idCliente;
@@ -29,7 +29,7 @@ public class Pedido {
     }
 
     // getters
-    public long getCodigo() {return this.codigo;}
+    public int getCodigo() {return this.codigo;}
     public String getEstado() {return this.estado;}
     public long getIdCliente() {return this.idCliente;}
     public int getCantidade() {return this.cantidade;}

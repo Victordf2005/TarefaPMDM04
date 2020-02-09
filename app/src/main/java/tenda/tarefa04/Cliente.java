@@ -13,7 +13,6 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -87,6 +86,7 @@ public class Cliente extends AppCompatActivity {
 
     }
 
+    // Método para lanzar a activity de novo pedido
     private void novoPedido() {
 
         //crear activity e lanzala
@@ -99,6 +99,7 @@ public class Cliente extends AppCompatActivity {
         startActivity(intent);
     }
 
+    // Método para lanzar a activity de ver pedidos pendentes
     private void verPendentes() {
 
         //crear activity e lanzala
@@ -111,6 +112,7 @@ public class Cliente extends AppCompatActivity {
         startActivity(intent);
     }
 
+    // Método para lanzar a activity de ver compras realizadas
     private void verRealizados() {
 
         //crear activity e lanzala
@@ -124,6 +126,7 @@ public class Cliente extends AppCompatActivity {
     }
 
 
+    // Método para lazar a activity que permite modificar os datos do cliente
     private void cambiarDatosPerfil() {
         // crear activity e lanzala
         Intent intentoPerfil = new Intent();
@@ -136,6 +139,8 @@ public class Cliente extends AppCompatActivity {
         intentoPerfil.setClassName(getApplicationContext(), "tenda.tarefa04.CambiarDatosPerfil");
         startActivity(intentoPerfil);
     }
+
+    // Método que busca e amosa os datos do cliente
     private void buscarDatosCliente() {
         Intent intent1 = getIntent();
         cliente = baseDatos.getUsuario(intent1.getExtras().getString(MainActivity.USUARIO),null, true);
@@ -143,6 +148,7 @@ public class Cliente extends AppCompatActivity {
         lblCliente.setText(cliente.getNome() + "\n" + cliente.getApelidos() + "\n");
         ImageView imaxePerfil = findViewById(R.id.ivCliente);
 
+        // Comprobamos permisos segundo a versión
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!temosPermiso()) {
                 ActivityCompat.requestPermissions(Cliente.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
@@ -150,13 +156,16 @@ public class Cliente extends AppCompatActivity {
                 permisoGaleria=true;
             }
         }
-        Log.i("imaxe: ", cliente.getImaxePerfil());
 
+        // Se temos acceso á galería, buscamos a imaxe de perfil
         if (permisoGaleria) {
-            Log.i("Permiso: ", "Si");
+
             Bitmap bitmap = BitmapFactory.decodeFile(cliente.getImaxePerfil());
+
             if (!(bitmap == null)) {
                 Bitmap bitmapEscalado = null;
+
+                // Escalamos a imaxe segundo a densidade do dispositivo
                 switch (getResources().getDisplayMetrics().densityDpi) {
                     case DisplayMetrics.DENSITY_LOW:
                         bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 320, 320, false);
@@ -174,12 +183,15 @@ public class Cliente extends AppCompatActivity {
                         bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 480, 480, false);
                         break;
                 }
+
+                // Asignamos a imaxe escalada
                 imaxePerfil.setImageBitmap(bitmapEscalado);
             }
         }
     }
 
 
+    // Método que devolve se temos permiso de acceso á galería
     private boolean temosPermiso() {
         int result = ContextCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.READ_EXTERNAL_STORAGE);
         return result == PackageManager.PERMISSION_GRANTED;

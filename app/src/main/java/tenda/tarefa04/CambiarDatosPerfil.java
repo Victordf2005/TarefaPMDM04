@@ -20,13 +20,10 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,27 +51,30 @@ public class CambiarDatosPerfil extends AppCompatActivity {
     private String usuario;
 
 
-
-    // Gardar elementos seleccionados, xa que se perden cando cambia de orientación
+    // Gardamos a ruta da imaxe escollida, por se foi modificada, xa que se perde cando cambia de orientación
     @Override
     protected void onSaveInstanceState(Bundle estado){
         super.onSaveInstanceState(estado);
         estado.putString("IMAXE", rutaImaxePerfil);
     }
 
-    // Recuperar elementos seleccionados cando cambie a orientación
+    // Recuperar a ruta da imaxe seleccionada antes do cambio de orientación
     @Override
     protected void onRestoreInstanceState(Bundle estado) {
         super.onRestoreInstanceState(estado);
 
-        //Collemos o spinner e seleccionamos a categoría que estaba escollida e deshabilitamos os listeners
+        // Volvemos a gardar a ruta da imaxe seleccionada
         rutaImaxePerfil = estado.getString("IMAXE");
 
+        // Volvemos a recuperar a imaxe seleccionada por se fora modificada antes do cambio de orientación
         ImageView imaxePerfil = findViewById(R.id.ivRexistroCambioPerfil);
 
         Bitmap bitmap = BitmapFactory.decodeFile(estado.getString("IMAXE"));
+
         if (!(bitmap == null)) {
+
             Bitmap bitmapEscalado = null;
+            // Escalamos a imaxe segundo a densidade do dispositivo
             switch (getResources().getDisplayMetrics().densityDpi) {
                 case DisplayMetrics.DENSITY_LOW:
                     bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 320, 320, false);
@@ -92,6 +92,7 @@ public class CambiarDatosPerfil extends AppCompatActivity {
                     bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 480, 480, false);
                     break;
             }
+            // Asignamos a imaxe escalada
             imaxePerfil.setImageBitmap(bitmapEscalado);
         }
 
@@ -111,7 +112,16 @@ public class CambiarDatosPerfil extends AppCompatActivity {
 
         });
 
+        // Evento click na imaxe
+        ImageView fotoPerfil = findViewById(R.id.ivRexistroCambioPerfil);
+        fotoPerfil.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View v) {
+                // Preguntamos se o usuario quere facer unha foto ou coller unha da galería
+                fonteFoto();
+            }
+        });
     }
 
     private void amosarDatosUsuario() {
@@ -126,8 +136,6 @@ public class CambiarDatosPerfil extends AppCompatActivity {
         EditText nome = findViewById(R.id.etNomeCambioPerfil);
         nome.setText(pantallaAnterior.getExtras().getString("nome"));
 
-        Log.i("Nome cliente ", pantallaAnterior.getExtras().getString("nome"));
-
         EditText apelidos = findViewById(R.id.etApelidosCambioPerfil);
         apelidos.setText(pantallaAnterior.getExtras().getString("apelidos"));
 
@@ -135,12 +143,13 @@ public class CambiarDatosPerfil extends AppCompatActivity {
         email.setText(pantallaAnterior.getExtras().getString("email"));
         ImageView imaxePerfil = findViewById(R.id.ivRexistroCambioPerfil);
 
+
+        // Comprobamos permisos de acceso á cámara e galería dependendo da versión
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!temosPermiso(1)) {
                 ActivityCompat.requestPermissions(CambiarDatosPerfil.this, new String[]{Manifest.permission.CAMERA}, 1);
             } else {
                 permisoCamara = true;
-                xestionarCamara();
             }
             if (!temosPermiso(2)) {
                 ActivityCompat.requestPermissions(CambiarDatosPerfil.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 2);
@@ -154,11 +163,13 @@ public class CambiarDatosPerfil extends AppCompatActivity {
             }
         }
 
+        // Se temos permiso de acceso á galería, cargamos a imaxe
         if (permisoGaleria) {
-            Log.i("Permiso: ", "Si");
             Bitmap bitmap = BitmapFactory.decodeFile(pantallaAnterior.getExtras().getString("imaxePerfil"));
             if (!(bitmap == null)) {
+
                 Bitmap bitmapEscalado = null;
+                //Escalamaos a imaxe segundo a densidade do dispositivo
                 switch (getResources().getDisplayMetrics().densityDpi) {
                     case DisplayMetrics.DENSITY_LOW:
                         bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 320, 320, false);
@@ -176,11 +187,13 @@ public class CambiarDatosPerfil extends AppCompatActivity {
                         bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 480, 480, false);
                         break;
                 }
+                // Asignamos a imaxe escalada
                 imaxePerfil.setImageBitmap(bitmapEscalado);
             }
         }
     }
 
+    // Comprobamos permisos
     private boolean temosPermiso(int codigo) {
 
         int result = PackageManager.PERMISSION_DENIED;
@@ -208,13 +221,6 @@ public class CambiarDatosPerfil extends AppCompatActivity {
                 case 1: {
                     // Se o usuario premeou o boton de cancelar o array volve cun null
                     permisoCamara = true;
-                    TextView infoPerfil = findViewById(R.id.tvInfoImaxe);
-                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                        xestionarCamara();
-                    } else {
-                        infoPerfil.setText("Non se pode cargar ningunha imaxe\nmentras non permita acceso á cámara");
-                    }
                 }
                 case 2: {
                     permisoGaleria = true;
@@ -227,19 +233,7 @@ public class CambiarDatosPerfil extends AppCompatActivity {
         }
     }
 
-    private void xestionarCamara() {
-
-        ImageView fotoPerfil = findViewById(R.id.ivRexistroCambioPerfil);
-        fotoPerfil.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // Preguntamos se o usuario quere facer unha foto ou coller unha da galería
-                fonteFoto();
-            }
-        });
-    }
-
+    // Preguntar de donde se obterá a imaxe
     private void fonteFoto() {
 
         final CharSequence[] opcions = {"Cámara","Galería","Cancelar"};
@@ -273,6 +267,7 @@ public class CambiarDatosPerfil extends AppCompatActivity {
         dialogo.show();
     }
 
+    // obteremos a imaxe facendo unha nova foto
     private void novaFoto() {
 
         File ruta = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
@@ -292,6 +287,7 @@ public class CambiarDatosPerfil extends AppCompatActivity {
 
     }
 
+    // Obteremos unha nova imaxe seleccionándoa da galería
     private void escollerFoto() {
         Intent intento = new Intent(Intent.ACTION_PICK);
         intento.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*");
@@ -330,6 +326,7 @@ public class CambiarDatosPerfil extends AppCompatActivity {
 
     }
 
+    // Método que devolve a ruta absoluta da imaxe escollida
     private String rutaDeUri(Uri selectedAudioUri,
                              ContentResolver contentResolver) {
         String filePath;
@@ -378,6 +375,7 @@ public class CambiarDatosPerfil extends AppCompatActivity {
         }
     }
 
+    // Antes de gravar, comprobamos se os datos son correctos
     private boolean datosCorrectos() {
 
         String erros = "";

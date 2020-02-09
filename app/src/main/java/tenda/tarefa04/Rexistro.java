@@ -18,7 +18,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,27 +48,30 @@ public class Rexistro extends AppCompatActivity {
     private boolean permisoTarxeta = false;
 
 
-
-    // Gardar elementos seleccionados, xa que se perden cando cambia de orientación
+    // Gardamos a ruta da imaxe escollida, por se foi modificada, xa que se perde cando cambia de orientación
     @Override
     protected void onSaveInstanceState(Bundle estado){
         super.onSaveInstanceState(estado);
         estado.putString("IMAXE", rutaImaxePerfil);
     }
 
-    // Recuperar elementos seleccionados cando cambie a orientación
+    // Recuperar a ruta da imaxe seleccionada antes do cambio de orientación
     @Override
     protected void onRestoreInstanceState(Bundle estado) {
         super.onRestoreInstanceState(estado);
 
-        //Collemos o spinner e seleccionamos a categoría que estaba escollida e deshabilitamos os listeners
+        // Volvemos a gardar a ruta da imaxe seleccionada
         rutaImaxePerfil = estado.getString("IMAXE");
 
+        // Volvemos a recuperar a imaxe seleccionada por se fora modificada antes do cambio de orientación
         ImageView imaxePerfil = findViewById(R.id.ivRexistro);
 
         Bitmap bitmap = BitmapFactory.decodeFile(estado.getString("IMAXE"));
+
         if (!(bitmap == null)) {
             Bitmap bitmapEscalado = null;
+
+            // Escalamos a imaxe segundo a densidade do dispositivo
             switch (getResources().getDisplayMetrics().densityDpi) {
                 case DisplayMetrics.DENSITY_LOW:
                     bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 320, 320, false);
@@ -87,6 +89,8 @@ public class Rexistro extends AppCompatActivity {
                     bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 480, 480, false);
                     break;
             }
+
+            // Asignamos a imaxe escalada
             imaxePerfil.setImageBitmap(bitmapEscalado);
         }
 
@@ -106,10 +110,21 @@ public class Rexistro extends AppCompatActivity {
 
         });
 
+        // Evento click na imaxe
+        ImageView fotoPerfil = findViewById(R.id.ivRexistro);
+        fotoPerfil.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // Preguntamos se o usuario quere facer unha foto ou coller unha da galería
+                fonteFoto();
+            }
+        });
+
     }
 
 
-
+    // Pedimos permisos
     public void pedirPermiso(){
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -128,13 +143,6 @@ public class Rexistro extends AppCompatActivity {
                 case 1: {
                     // Se o usuario premeou o boton de cancelar o array volve cun null
                     permisoCamara = true;
-                    TextView infoPerfil = findViewById(R.id.tvInfoImaxe);
-                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                        xestionarCamara();
-                    } else {
-                        infoPerfil.setText("Non se pode cargar ningunha imaxe\nmentras non permita acceso á cámara");
-                    }
                 }
                 case 2: {
                     permisoGaleria = true;
@@ -147,19 +155,7 @@ public class Rexistro extends AppCompatActivity {
         }
     }
 
-    private void xestionarCamara() {
-
-        ImageView fotoPerfil = findViewById(R.id.ivRexistro);
-        fotoPerfil.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // Preguntamos se o usuario quere facer unha foto ou coller unha da galería
-                fonteFoto();
-            }
-        });
-    }
-
+    // Preguntamos se obtemos a imaxe da cámara ou da galería
     private void fonteFoto() {
 
         final CharSequence[] opcions = {"Cámara","Galería","Cancelar"};
@@ -193,12 +189,14 @@ public class Rexistro extends AppCompatActivity {
         dialogo.show();
     }
 
+    // Obteremos a imaxe facendo unha novo foto
     private void novaFoto() {
 
         File ruta = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         nomeFoto = "Img_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".jpg";
         File arquivo = new File(ruta, nomeFoto);
         Uri contentUri=null;
+
         if (Build.VERSION.SDK_INT >= 24) {
             contentUri = getUriForFile(getApplicationContext(), getApplicationContext().getPackageName() + ".provider", arquivo);
         }
@@ -212,6 +210,7 @@ public class Rexistro extends AppCompatActivity {
 
     }
 
+    // Obteremos a imaxe seleccionándoa da galería
     private void escollerFoto() {
         Intent intento = new Intent(Intent.ACTION_PICK);
         intento.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*");
@@ -230,11 +229,16 @@ public class Rexistro extends AppCompatActivity {
                 case FOTO_NOVA:
                     ruta = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
                     arquivo = new File(ruta, nomeFoto);
+
+                    // Comprobamos se existe a foto recén feita
                     if (arquivo.exists()) {
                         rutaImaxePerfil = arquivo.getAbsolutePath();
                         Bitmap imaxe = BitmapFactory.decodeFile(arquivo.getAbsolutePath());
+
                         if (!(imaxe == null)) {
                             Bitmap bitmapEscalado = null;
+
+                            // Escalamos a imaxe segundo a densidade do dispositivo
                             switch (getResources().getDisplayMetrics().densityDpi) {
                                 case DisplayMetrics.DENSITY_LOW:
                                     bitmapEscalado = Bitmap.createScaledBitmap(imaxe, 320, 320, false);
@@ -252,6 +256,7 @@ public class Rexistro extends AppCompatActivity {
                                     bitmapEscalado = Bitmap.createScaledBitmap(imaxe, 480, 480, false);
                                     break;
                             }
+                            // Asignamos a imaxe escalada
                             fotoPerfil.setImageBitmap(bitmapEscalado);
                         }
                     } else {
@@ -268,6 +273,7 @@ public class Rexistro extends AppCompatActivity {
 
     }
 
+    // Método que devolve a ruta absoluta á imaxe
     private String rutaDeUri(Uri selectedAudioUri,
                                              ContentResolver contentResolver) {
         String filePath;
@@ -282,6 +288,7 @@ public class Rexistro extends AppCompatActivity {
         return filePath;
     }
 
+    // Método para gardar os datos do novo usuario
     private void rexistrarUsuario() {
 
         EditText etUsuario = findViewById(R.id.etUsuarioRexistro);
@@ -307,7 +314,7 @@ public class Rexistro extends AppCompatActivity {
                 // Datos gravados correctamente
                 Toast.makeText(getApplicationContext(), "Datos gravados correctamewnte; código: " + resultado, Toast.LENGTH_LONG).show();
 
-                // Esperar unos segundos a pechar a activity para permitir ver a mensaxe Toast
+                // Esperar uns segundos a pechar a activity para permitir ver a mensaxe Toast
                 Handler h = new Handler();
                 h.postDelayed(new Runnable() {
                     public void run() {
@@ -324,6 +331,7 @@ public class Rexistro extends AppCompatActivity {
         }
     }
 
+    // Método que comproba se os datos introducidos son correctos
     private boolean datosCorrectos() {
 
         String erros = "";

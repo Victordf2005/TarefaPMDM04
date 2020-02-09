@@ -16,7 +16,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,56 +43,56 @@ public class EnderezoEnvio extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String enderezo = ((EditText) findViewById(R.id.etEnderezo)).getText().toString().trim();
-                String cpostal = ((EditText) findViewById(R.id.etCodPostal)).getText().toString().trim();
-                String cidade=((EditText) findViewById(R.id.etCidade)).getText().toString().trim();
+            String enderezo = ((EditText) findViewById(R.id.etEnderezo)).getText().toString().trim();
+            String cpostal = ((EditText) findViewById(R.id.etCodPostal)).getText().toString().trim();
+            String cidade=((EditText) findViewById(R.id.etCidade)).getText().toString().trim();
 
-                // Só permitimos rematar o pedido cando complete todos os datos do enderezo
-                if (enderezo.equals("") || cpostal.equals("") || cidade.equals("")) {
+            // Só permitimos rematar o pedido cando complete todos os datos do enderezo
+            if (enderezo.equals("") || cpostal.equals("") || cidade.equals("")) {
 
-                    Toast.makeText(getApplicationContext(), "Hai que completar todos os datos do enderezo.",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Hai que completar todos os datos do enderezo.",Toast.LENGTH_LONG).show();
 
-                } else {
+            } else {
 
-                    AlertDialog.Builder dialogo = new AlertDialog.Builder(EnderezoEnvio.this);
+                AlertDialog.Builder dialogo = new AlertDialog.Builder(EnderezoEnvio.this);
 
-                    dialogo.setTitle("Información sobre o pedido");
-                    dialogo.setIcon(android.R.drawable.ic_dialog_alert);
+                dialogo.setTitle("Información sobre o pedido");
+                dialogo.setIcon(android.R.drawable.ic_dialog_alert);
 
-                    Intent intent1 = getIntent();
+                Intent intent1 = getIntent();
 
-                    String textoPedido = "Datos do pedido:"
-                            + "\nCategoría: " + intent1.getExtras().getString(FacerPedido.CATEGORIA)
-                            + "\nProduto..: " +  intent1.getExtras().getString(FacerPedido.PRODUTO)
-                            + "\nCantidade: " + intent1.getExtras().getString(FacerPedido.CANTIDADE)
-                            + "\n\nEnderezo de envío:"
-                            + "\n" + ((EditText) findViewById(R.id.etEnderezo)).getText().toString()
-                            + "\n" + ((EditText) findViewById(R.id.etCodPostal)).getText().toString()
-                            + " " + ((EditText) findViewById(R.id.etCidade)).getText().toString()
-                            + "\n\n Pulse 'OK' para aceptar e gardar o pedido";
+                String textoPedido = "Datos do pedido:"
+                        + "\nCategoría: " + intent1.getExtras().getString(FacerPedido.CATEGORIA)
+                        + "\nProduto..: " +  intent1.getExtras().getString(FacerPedido.PRODUTO)
+                        + "\nCantidade: " + intent1.getExtras().getString(FacerPedido.CANTIDADE)
+                        + "\n\nEnderezo de envío:"
+                        + "\n" + ((EditText) findViewById(R.id.etEnderezo)).getText().toString()
+                        + "\n" + ((EditText) findViewById(R.id.etCodPostal)).getText().toString()
+                        + " " + ((EditText) findViewById(R.id.etCidade)).getText().toString()
+                        + "\n\n Pulse 'OK' para aceptar e gardar o pedido";
 
-                    dialogo.setMessage(textoPedido);
+                dialogo.setMessage(textoPedido);
 
-                    dialogo.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            gravarPedido();
-                        }
-                    });
-                    dialogo.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                dialogo.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        gravarPedido();
+                    }
+                });
+                dialogo.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-                            Toast.makeText(getApplicationContext(),"Pedido cancelado", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                    dialogo.create();   // Devolve un Dialog, pero non o necesitamos polo de agora.
-                    dialogo.show();
+                        Toast.makeText(getApplicationContext(),"Pedido cancelado", Toast.LENGTH_LONG).show();
+                    }
+                });
+                dialogo.create();   // Devolve un Dialog, pero non o necesitamos polo de agora.
+                dialogo.show();
 
 
-                }
-            };
-        });
+            }
+        };
+    });
     };
 
     private void gravarPedido() {
@@ -132,6 +131,7 @@ public class EnderezoEnvio extends AppCompatActivity {
         }, 4000);
     }
 
+    // Método para buscar e amosar os datos do cliente
     private void buscarDatosCliente() {
 
         Intent intent1 = getIntent();
@@ -139,6 +139,7 @@ public class EnderezoEnvio extends AppCompatActivity {
         lblCliente.setText(intent1.getExtras().getString("nome_cliente") + "\n" + intent1.getExtras().get("apelidos_cliente"));
         ImageView imaxePerfil = findViewById(R.id.ivCliente);
 
+        // Comprobamos permisos de acceso á galería
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!temosPermiso()) {
                 ActivityCompat.requestPermissions(EnderezoEnvio.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
@@ -146,13 +147,16 @@ public class EnderezoEnvio extends AppCompatActivity {
                 permisoGaleria=true;
             }
         }
-        Log.i("imaxe: ", intent1.getExtras().getString("imaxePerfil"));
 
+        // Se temos acceso á galería, buscamos a imaxe de perfil
         if (permisoGaleria) {
-            Log.i("Permiso: ", "Si");
+
             Bitmap bitmap = BitmapFactory.decodeFile( intent1.getExtras().getString("imaxePerfil"));
+
             if (!(bitmap == null)) {
                 Bitmap bitmapEscalado = null;
+
+                // Escalamos a imaxe segundo a densidade
                 switch (getResources().getDisplayMetrics().densityDpi) {
                     case DisplayMetrics.DENSITY_LOW:
                         bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 320, 320, false);
@@ -170,12 +174,15 @@ public class EnderezoEnvio extends AppCompatActivity {
                         bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 480, 480, false);
                         break;
                 }
+
+                // Asignamoa a imaxe
                 imaxePerfil.setImageBitmap(bitmapEscalado);
             }
         }
     }
 
 
+    // Método que devolve se temos permiso de acceso á galería
     private boolean temosPermiso() {
         int result = ContextCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.READ_EXTERNAL_STORAGE);
         return result == PackageManager.PERMISSION_GRANTED;

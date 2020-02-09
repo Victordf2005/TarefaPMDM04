@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // Se áinda non existe a base de datos na que traballaremos, copiamos a base de datos orixinal
     private void copiarBD() {
         String bddestino = "/data/data/" + getPackageName() + "/databases/"
                 + BDTendaVDF.NOME_BD;

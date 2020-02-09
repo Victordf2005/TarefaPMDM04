@@ -13,7 +13,6 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,13 +33,17 @@ public class Administrador extends AppCompatActivity {
 
     private Boolean permisoGaleria = false;
 
+    // Método para obter e amosar os datos do usuario administrador
     private void buscarDatosAdmin() {
+
         Intent intent1 = getIntent();
         usuario = baseDatos.getUsuario(intent1.getExtras().getString(MainActivity.USUARIO),null, true);
+
         TextView lblAdmin = findViewById(R.id.tvNomeAdmin);
         lblAdmin.setText(usuario.getNome() + "\n" + usuario.getApelidos() + "\n");
         ImageView imaxePerfil = findViewById(R.id.ivAdmin);
 
+        // comprobamos permisos dependendo da versión
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!temosPermiso()) {
                 ActivityCompat.requestPermissions(Administrador.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
@@ -48,12 +51,15 @@ public class Administrador extends AppCompatActivity {
                 permisoGaleria=true;
             }
         }
-        Log.i("imaxe: ", usuario.getImaxePerfil());
 
+        // Se podemos acceder á galería, buscamos a foto de perfil
+        // a través da ruta almacenada na BD.
         if (permisoGaleria) {
-            Log.i("Permiso: ", "Si");
+
             Bitmap bitmap = BitmapFactory.decodeFile(usuario.getImaxePerfil());
             if (!(bitmap == null)) {
+
+                // Escalamos a imaxe segundo a densidade do dispositivo
                 Bitmap bitmapEscalado = null;
                 switch (getResources().getDisplayMetrics().densityDpi) {
                     case DisplayMetrics.DENSITY_LOW:
@@ -72,12 +78,15 @@ public class Administrador extends AppCompatActivity {
                         bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 480, 480, false);
                         break;
                 }
+
+                // Asignamos a imaxe escalada
                 imaxePerfil.setImageBitmap(bitmapEscalado);
             }
         }
 
     }
 
+    // Comprobamos permiso de acdeso á galería.
     private boolean temosPermiso() {
         int result = ContextCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.READ_EXTERNAL_STORAGE);
         return result == PackageManager.PERMISSION_GRANTED;
@@ -98,7 +107,7 @@ public class Administrador extends AppCompatActivity {
 
     private void xestionarEventos(){
 
-        // Botón para facer un novo pedido
+        // Botón para ver pedidos en trámite
         Button btnEnTramite = findViewById(R.id.btEnTramite);
         btnEnTramite.setOnClickListener(new View.OnClickListener() {
 
@@ -108,7 +117,7 @@ public class Administrador extends AppCompatActivity {
             }
         });
 
-        // Botón para ver pedidos en trámite
+        // Botón para ver pedidos aceptados
         Button btnAceptados = findViewById(R.id.btAceptados);
         btnAceptados.setOnClickListener(new View.OnClickListener() {
 
@@ -118,7 +127,7 @@ public class Administrador extends AppCompatActivity {
             }
         });
 
-        // Botón para ver pedidos en trámite
+        // Botón para ver pedidos rexeitados
         Button btnRexeitados = findViewById(R.id.btRexeitados);
         btnRexeitados.setOnClickListener(new View.OnClickListener() {
 
@@ -149,6 +158,7 @@ public class Administrador extends AppCompatActivity {
         });
     }
 
+    // Método que lanza a activity de ver pedidos en trámite
     private void verEnTramite() {
 
         //crear activity e lanzala
@@ -158,6 +168,7 @@ public class Administrador extends AppCompatActivity {
         startActivity(intent);
     }
 
+    // Método que lanza a activity de ver pedidos aceptados
     private void verAceptados() {
 
         //crear activity e lanzala
@@ -167,6 +178,7 @@ public class Administrador extends AppCompatActivity {
         startActivity(intent);
     }
 
+    // Método que lanza a activity de ver pedidos rexeitados
     private void verRexeitados() {
 
         //crear activity e lanzala
@@ -176,6 +188,7 @@ public class Administrador extends AppCompatActivity {
         startActivity(intent);
     }
 
+    // Métooo que lanza a activity para poder modificar os datos de perfil
     private void cambiarDatosPerfil() {
         // crear activity e lanzala
         Intent intentoPerfil = new Intent();
@@ -243,6 +256,7 @@ public class Administrador extends AppCompatActivity {
     }
 
 
+    // Menú para AppBar
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 

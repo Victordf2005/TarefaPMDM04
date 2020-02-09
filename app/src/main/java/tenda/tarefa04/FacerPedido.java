@@ -13,7 +13,6 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -191,7 +190,6 @@ public class FacerPedido extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int posicion, long id) {
                 if(view == null) return;
-                Log.i("onItemSelectedP","producto: " + posicion);
 
                 Spinner spCant = findViewById(R.id.spnCantidade);
                 // Só habilitamos o botón "seguinte" cando teña selecionado algún produto
@@ -268,6 +266,7 @@ public class FacerPedido extends AppCompatActivity {
         btSeguinte.setEnabled(siNon);
     }
 
+    // Método para buscar e amosar os datos do cliente
     private void buscarDatosCliente() {
 
         Intent intent1 = getIntent();
@@ -275,6 +274,7 @@ public class FacerPedido extends AppCompatActivity {
         lblCliente.setText(intent1.getExtras().getString("nome_cliente") + "\n" + intent1.getExtras().get("apelidos_cliente"));
         ImageView imaxePerfil = findViewById(R.id.ivCliente);
 
+        // Comprobamos se temos acceso á galería
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!temosPermiso()) {
                 ActivityCompat.requestPermissions(FacerPedido.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
@@ -282,36 +282,42 @@ public class FacerPedido extends AppCompatActivity {
                 permisoGaleria=true;
             }
         }
-        Log.i("imaxe: ", intent1.getExtras().getString("imaxePerfil"));
 
+        // Se temos acceso, buscamos a imaxe de perfil
         if (permisoGaleria) {
-        Log.i("Permiso: ", "Si");
-        Bitmap bitmap = BitmapFactory.decodeFile( intent1.getExtras().getString("imaxePerfil"));
-        if (!(bitmap == null)) {
-            Bitmap bitmapEscalado = null;
-            switch (getResources().getDisplayMetrics().densityDpi) {
-                case DisplayMetrics.DENSITY_LOW:
-                    bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 320, 320, false);
-                    break;
-                case DisplayMetrics.DENSITY_MEDIUM:
-                    bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 480, 480, false);
-                    break;
-                case DisplayMetrics.DENSITY_HIGH:
-                    bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 600, 600, false);
-                    break;
-                case DisplayMetrics.DENSITY_XHIGH:
-                    bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 960, 960, false);
-                    break;
-                default:
-                    bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 480, 480, false);
-                    break;
+
+            Bitmap bitmap = BitmapFactory.decodeFile( intent1.getExtras().getString("imaxePerfil"));
+
+            if (!(bitmap == null)) {
+                Bitmap bitmapEscalado = null;
+
+                // Escalamos a imaxe segundo a densidade do dispositivo
+                switch (getResources().getDisplayMetrics().densityDpi) {
+                    case DisplayMetrics.DENSITY_LOW:
+                        bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 320, 320, false);
+                        break;
+                    case DisplayMetrics.DENSITY_MEDIUM:
+                        bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 480, 480, false);
+                        break;
+                    case DisplayMetrics.DENSITY_HIGH:
+                        bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 600, 600, false);
+                        break;
+                    case DisplayMetrics.DENSITY_XHIGH:
+                        bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 960, 960, false);
+                        break;
+                    default:
+                        bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 480, 480, false);
+                        break;
+                }
+
+                // Asignamos a imaxe escalada
+                imaxePerfil.setImageBitmap(bitmapEscalado);
             }
-            imaxePerfil.setImageBitmap(bitmapEscalado);
         }
     }
-}
 
 
+    // Método que devolve se temos permiso de acceso á galería
     private boolean temosPermiso() {
         int result = ContextCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.READ_EXTERNAL_STORAGE);
         return result == PackageManager.PERMISSION_GRANTED;

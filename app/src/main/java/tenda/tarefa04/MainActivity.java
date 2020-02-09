@@ -1,10 +1,9 @@
-package tenda.tarefa03;
+package tenda.tarefa04;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -52,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                                     // Usuario de tipo administrador
                                     // crear activity e lanzala
                                     Intent intent = new Intent();
-                                    intent.setClassName(getApplicationContext(), "tenda.tarefa03.Administrador");
+                                    intent.setClassName(getApplicationContext(), "tenda.tarefa04.Administrador");
                                     // Pasámoslle á activity os datos do usuario
                                     intent.putExtra(USUARIO, usuarioLoggeado.getUsuario());
                                     startActivityForResult(intent, 1);
@@ -62,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                                     // Usuario de tipo cliente
                                     // crear activity e lanzala
                                     Intent intent = new Intent();
-                                    intent.setClassName(getApplicationContext(), "tenda.tarefa03.Cliente");
+                                    intent.setClassName(getApplicationContext(), "tenda.tarefa04.Cliente");
                                     // Pasámoslle á activity os datos do usuario
                                     intent.putExtra(USUARIO, usuarioLoggeado.getUsuario());
                                     startActivityForResult(intent, 2);
@@ -91,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //crear activity e lanzala
                 Intent intent = new Intent();
-                intent.setClassName(getApplicationContext(), "tenda.tarefa03.Rexistro");
+                intent.setClassName(getApplicationContext(), "tenda.tarefa04.Rexistro");
                 startActivityForResult(intent,2);
             }
         });

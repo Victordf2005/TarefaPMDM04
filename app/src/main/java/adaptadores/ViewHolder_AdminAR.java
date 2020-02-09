@@ -1,6 +1,5 @@
 package adaptadores;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -11,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import BaseDatos.BDTendaVDF;
 import BaseDatos.Pedido;
-import tenda.tarefa03.Administrador_VerPedidosAR;
-import tenda.tarefa03.R;
+import tenda.tarefa04.Administrador_VerPedidosAR;
+import tenda.tarefa04.R;
 
 
 public class ViewHolder_AdminAR extends RecyclerView.ViewHolder {

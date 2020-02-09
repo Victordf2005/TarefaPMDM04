@@ -1,14 +1,24 @@
-package tenda.tarefa03;
+package tenda.tarefa04;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,11 +29,12 @@ import BaseDatos.Pedido;
 import adaptadores.RecyclerViewAdapter_Pedidos;
 
 
-public class VerPedidos extends AppCompatActivity {
+public class VerCompras extends AppCompatActivity {
 
     private BDTendaVDF baseDatos;
 
     private ArrayList<Pedido> pedidos;
+    private boolean permisoGaleria = false;
 
     private void inicializarRecycleView(){
 
@@ -40,9 +51,60 @@ public class VerPedidos extends AppCompatActivity {
         String texto = intent1.getExtras().getString("nome_cliente") +
                 "\n" + intent1.getExtras().getString("apelidos_cliente");
         lblCliente.setText(texto);
+        ImageView imaxePerfil = findViewById(R.id.ivCliente);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!temosPermiso()) {
+                ActivityCompat.requestPermissions(VerCompras.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+            } else {
+                permisoGaleria=true;
+            }
+        }
+        Log.i("imaxe: ", intent1.getExtras().getString("imaxePerfil"));
+
+        if (permisoGaleria) {
+            Log.i("Permiso: ", "Si");
+            Bitmap bitmap = BitmapFactory.decodeFile( intent1.getExtras().getString("imaxePerfil"));
+            if (!(bitmap == null)) {
+                Bitmap bitmapEscalado = null;
+                switch (getResources().getDisplayMetrics().densityDpi) {
+                    case DisplayMetrics.DENSITY_LOW:
+                        bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 320, 320, false);
+                        break;
+                    case DisplayMetrics.DENSITY_MEDIUM:
+                        bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 480, 480, false);
+                        break;
+                    case DisplayMetrics.DENSITY_HIGH:
+                        bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 600, 600, false);
+                        break;
+                    case DisplayMetrics.DENSITY_XHIGH:
+                        bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 960, 960, false);
+                        break;
+                }
+                imaxePerfil.setImageBitmap(bitmap);
+            }
+        }
+    }
+
+
+    private boolean temosPermiso() {
+        int result = ContextCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.READ_EXTERNAL_STORAGE);
+        return result == PackageManager.PERMISSION_GRANTED;
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+
+        if (grantResults.length>0) {
+            switch (requestCode) {
+                case 1: {
+                    permisoGaleria = true;
+                }
+            }
+        }
     }
 /*
-
     @Override
     public void onStart(){
         super.onStart();
@@ -52,11 +114,6 @@ public class VerPedidos extends AppCompatActivity {
             try {
                 baseDatos = BDTendaVDF.getInstance(getApplicationContext());
                 baseDatos.abrirBD();
-
-                amosarDatosCliente();
-                pedidos = baseDatos.getPedidosCliente("P", getIntent().getExtras().getString("id_cliente"));
-
-                inicializarRecycleView();
             }
             catch (Exception erro) {
                 // Erro tratando de abrir a BD
@@ -64,6 +121,8 @@ public class VerPedidos extends AppCompatActivity {
                 finish();
             }
         }
+
+        buscarDatosCliente();
     }
 
     @Override
@@ -75,15 +134,14 @@ public class VerPedidos extends AppCompatActivity {
             baseDatos.pecharBD();
             baseDatos=null;
         }
-    }
-*/
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ver_pedidos);
+        setContentView(R.layout.activity_ver_compras);
 
-        Toolbar barra = findViewById(R.id.toolbarPed);
+        Toolbar barra = findViewById(R.id.toolbarCom);
         setSupportActionBar(barra);
 
         if (baseDatos == null) {
@@ -93,7 +151,7 @@ public class VerPedidos extends AppCompatActivity {
                 baseDatos.abrirBD();
 
                 amosarDatosCliente();
-                pedidos = baseDatos.getPedidosCliente("P", getIntent().getExtras().getString("id_cliente"));
+                pedidos = baseDatos.getPedidosCliente("A", getIntent().getExtras().getString("id_cliente"));
 
                 inicializarRecycleView();
             }
@@ -104,9 +162,7 @@ public class VerPedidos extends AppCompatActivity {
             }
         }
 
-
     }
-
 
 
 
@@ -130,5 +186,4 @@ public class VerPedidos extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
 }

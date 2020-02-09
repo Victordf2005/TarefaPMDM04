@@ -1,4 +1,4 @@
-package tenda.tarefa03;
+package tenda.tarefa04;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -58,6 +58,7 @@ public class Administrador_VerPedidosAR extends AppCompatActivity {
             }
         }
     }
+/*
 
     @Override
     public void onStop(){
@@ -69,6 +70,7 @@ public class Administrador_VerPedidosAR extends AppCompatActivity {
             baseDatos=null;
         }
     }
+*/
 
 
     @Override

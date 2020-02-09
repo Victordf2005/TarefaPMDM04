@@ -7,7 +7,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import tenda.tarefa03.R;
+import tenda.tarefa04.R;
 
 public class ViewHolder_Pedidos extends RecyclerView.ViewHolder {
 

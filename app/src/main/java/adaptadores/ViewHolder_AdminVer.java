@@ -1,13 +1,12 @@
 package adaptadores;
 
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import tenda.tarefa03.R;
+import tenda.tarefa04.R;
 
 public class ViewHolder_AdminVer extends RecyclerView.ViewHolder {
 

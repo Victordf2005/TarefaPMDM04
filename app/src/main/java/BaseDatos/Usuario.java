@@ -9,12 +9,13 @@ public class Usuario {
     private String usuario = "";
     private String contrasinal = "";
     private String tipo = "";
+    private String imaxePerfil = "";
 
     // construtor por defecto
     public Usuario(){}
 
     // construtor con parámetros
-    public Usuario(long codigo, String nome, String apelidos, String email, String usuario, String contrasinal, String tipo) {
+    public Usuario(long codigo, String nome, String apelidos, String email, String usuario, String contrasinal, String tipo, String imaxePerfil) {
         this.codigo = codigo;
         this.nome = nome;
         this.apelidos = apelidos;
@@ -22,6 +23,7 @@ public class Usuario {
         this.usuario = usuario;
         this.contrasinal = contrasinal;
         this.tipo = tipo;
+        this.imaxePerfil = imaxePerfil;
     }
 
     // getters
@@ -32,6 +34,7 @@ public class Usuario {
     public String getUsuario() {return this.usuario;}
     public String getContrasinal() {return this.contrasinal;}
     public String getTipo() {return this.tipo;}
+    public String getImaxePerfil() {return this.imaxePerfil;}
 
     // setters
     public void setCodigo(int codigo) {this.codigo = codigo;}
@@ -41,5 +44,6 @@ public class Usuario {
     public void setUsuario(String usuario){this.usuario = usuario;}
     public void setContrasinal(String contrasinal) {this.contrasinal = contrasinal;}
     public void setTipo(String tipo) {this.tipo = tipo;}
+    public void setImaxePerfil(String imaxePerfil) {this.imaxePerfil = imaxePerfil;}
 
 }

@@ -1,10 +1,18 @@
-package tenda.tarefa03;
+package tenda.tarefa04;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +20,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -24,6 +33,8 @@ public class FacerPedido extends AppCompatActivity {
     public final static String IDPRODUTO = "idproduto";
     public final static String PRODUTO = "produto";
     public final static String CANTIDADE = "cantidade";
+
+    private boolean permisoGaleria = false;
 
     // Gardar elementos seleccionados, xa que se perden cando cambia de orientación
     @Override
@@ -213,7 +224,7 @@ public class FacerPedido extends AppCompatActivity {
 
                 //crear activity
                 Intent intent = new Intent();
-                intent.setClassName(getApplicationContext(), "tenda.tarefa03.EnderezoEnvio");
+                intent.setClassName(getApplicationContext(), "tenda.tarefa04.EnderezoEnvio");
 
                 // Pasámoslle á activity os datos selecionados
                 intent.putExtras(getIntent().getExtras());
@@ -222,6 +233,8 @@ public class FacerPedido extends AppCompatActivity {
                 intent.putExtra(IDPRODUTO, String.valueOf(((Spinner) findViewById(R.id.spnProduto)).getSelectedItemId()));
                 intent.putExtra(PRODUTO, ((Spinner) findViewById(R.id.spnProduto)).getSelectedItem().toString());
                 intent.putExtra(CANTIDADE, ((Spinner) findViewById(R.id.spnCantidade)).getSelectedItem().toString());
+                Intent intentAnterior = getIntent();
+                intent.putExtra("imaxePerfil,", intentAnterior.getExtras().getString("imaxeperfil"));
 
                 //Lanzamos a activity
                 startActivityForResult(intent, 211);
@@ -255,14 +268,71 @@ public class FacerPedido extends AppCompatActivity {
         btSeguinte.setEnabled(siNon);
     }
 
+    private void buscarDatosCliente() {
+
+        Intent intent1 = getIntent();
+        TextView lblCliente = findViewById(R.id.tvNomeCliente);
+        lblCliente.setText(intent1.getExtras().getString("nome_cliente") + "\n" + intent1.getExtras().get("apelidos_cliente"));
+        ImageView imaxePerfil = findViewById(R.id.ivCliente);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (!temosPermiso()) {
+            ActivityCompat.requestPermissions(FacerPedido.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+        } else {
+            permisoGaleria=true;
+        }
+    }
+        Log.i("imaxe: ", intent1.getExtras().getString("imaxePerfil"));
+
+        if (permisoGaleria) {
+        Log.i("Permiso: ", "Si");
+        Bitmap bitmap = BitmapFactory.decodeFile( intent1.getExtras().getString("imaxePerfil"));
+        if (!(bitmap == null)) {
+            Bitmap bitmapEscalado = null;
+            switch (getResources().getDisplayMetrics().densityDpi) {
+                case DisplayMetrics.DENSITY_LOW:
+                    bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 320, 320, false);
+                    break;
+                case DisplayMetrics.DENSITY_MEDIUM:
+                    bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 480, 480, false);
+                    break;
+                case DisplayMetrics.DENSITY_HIGH:
+                    bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 600, 600, false);
+                    break;
+                case DisplayMetrics.DENSITY_XHIGH:
+                    bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 960, 960, false);
+                    break;
+            }
+            imaxePerfil.setImageBitmap(bitmap);
+        }
+    }
+}
+
+
+    private boolean temosPermiso() {
+        int result = ContextCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.READ_EXTERNAL_STORAGE);
+        return result == PackageManager.PERMISSION_GRANTED;
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+
+        if (grantResults.length>0) {
+            switch (requestCode) {
+                case 1: {
+                    permisoGaleria = true;
+                }
+            }
+        }
+    }
+
 
     @Override
     public void onStart(){
         super.onStart();
 
-        Intent intent1 = getIntent();
-        TextView lblCliente = findViewById(R.id.tvNomeCliente);
-        lblCliente.setText(intent1.getExtras().getString("nome_cliente") + "\n" + intent1.getExtras().get("apelidos_cliente"));
+        buscarDatosCliente();
     }
 
     @Override

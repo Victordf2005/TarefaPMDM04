@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="tenda.tarefa03.Administrador">
+    tools:context="tenda.tarefa04.Administrador">
 
 <androidx.appcompat.widget.Toolbar
     android:id="@+id/toolbarAdmin"
@@ -35,7 +35,7 @@
             android:layout_weight="1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/admin" />
+            app:srcCompat="@drawable/nonfoto" />
 
         <TextView
             android:id="@+id/tvNomeAdmin"

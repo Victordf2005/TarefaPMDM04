@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class BDTendaVDF  extends SQLiteOpenHelper {
 
-    public final static String NOME_BD = "bdTarefa03.db";
+    public final static String NOME_BD = "bdTarefa04.db";
     public final static int VERSION_BD = 1;
     public final static String TABOA_USUARIOS = "usuarios";
     public final static String TABOA_PEDIDOS = "pedidos";
@@ -57,7 +57,7 @@ public class BDTendaVDF  extends SQLiteOpenHelper {
 
 
     // Método para engadir un novo usuario
-    public long engadirUsuario(String nome, String apelidos, String email, String usuario, String contrasinal, String tipo) {
+    public long engadirUsuario(String nome, String apelidos, String email, String usuario, String contrasinal, String tipo, String imaxePerfil) {
 
         // creamos o rexistro
         ContentValues rexistro = new ContentValues();
@@ -69,6 +69,7 @@ public class BDTendaVDF  extends SQLiteOpenHelper {
         rexistro.put("us_usuario", usuario);
         rexistro.put("us_contrasinal", contrasinal);
         rexistro.put("us_tipo", tipo);
+        rexistro.put("us_imaxe", imaxePerfil);
 
         // gravamos na BD, que nos devolve o _id do rexistro ou -1 se hai erro
         long codigo = sqlLiteDB.insert(TABOA_USUARIOS, null, rexistro);
@@ -99,7 +100,8 @@ public class BDTendaVDF  extends SQLiteOpenHelper {
                     consulta.getString(3),
                     consulta.getString(4),
                     consulta.getString(5),
-                    consulta.getString(6));
+                    consulta.getString(6),
+                    consulta.getString(7));
         }
 
         return retorno;

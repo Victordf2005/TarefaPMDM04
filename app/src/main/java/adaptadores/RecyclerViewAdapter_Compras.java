@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import BaseDatos.Pedido;
-import tenda.tarefa03.R;
+import tenda.tarefa04.R;
 
 public class RecyclerViewAdapter_Compras extends RecyclerView.Adapter {
 

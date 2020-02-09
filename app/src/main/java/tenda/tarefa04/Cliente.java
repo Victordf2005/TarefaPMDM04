@@ -1,15 +1,24 @@
-package tenda.tarefa03;
+package tenda.tarefa04;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +29,8 @@ public class Cliente extends AppCompatActivity {
 
     private BDTendaVDF baseDatos;
     private Usuario cliente;
+
+    private Boolean permisoGaleria = false;
 
     private void xestionarEventos(){
 
@@ -74,7 +85,8 @@ public class Cliente extends AppCompatActivity {
         intent.putExtra("id_cliente", String.valueOf(cliente.getCodigo()));
         intent.putExtra("nome_cliente", cliente.getNome());
         intent.putExtra("apelidos_cliente", cliente.getApelidos());
-        intent.setClassName(getApplicationContext(), "tenda.tarefa03.FacerPedido");
+        intent.putExtra("imaxePerfil", cliente.getImaxePerfil());
+        intent.setClassName(getApplicationContext(), "tenda.tarefa04.FacerPedido");
         startActivity(intent);
     }
 
@@ -85,7 +97,8 @@ public class Cliente extends AppCompatActivity {
         intent.putExtra("id_cliente", String.valueOf(cliente.getCodigo()));
         intent.putExtra("nome_cliente", cliente.getNome());
         intent.putExtra("apelidos_cliente", cliente.getApelidos());
-        intent.setClassName(getApplicationContext(), "tenda.tarefa03.VerPedidos");
+        intent.putExtra("imaxePerfil", cliente.getImaxePerfil());
+        intent.setClassName(getApplicationContext(), "tenda.tarefa04.VerPedidos");
         startActivity(intent);
     }
 
@@ -96,7 +109,8 @@ public class Cliente extends AppCompatActivity {
         intent.putExtra("id_cliente", String.valueOf(cliente.getCodigo()));
         intent.putExtra("nome_cliente", cliente.getNome());
         intent.putExtra("apelidos_cliente", cliente.getApelidos());
-        intent.setClassName(getApplicationContext(), "tenda.tarefa03.VerCompras");
+        intent.putExtra("imaxePerfil", cliente.getImaxePerfil());
+        intent.setClassName(getApplicationContext(), "tenda.tarefa04.VerCompras");
         startActivity(intent);
     }
 
@@ -104,9 +118,60 @@ public class Cliente extends AppCompatActivity {
         Intent intent1 = getIntent();
         cliente = baseDatos.getUsuario(intent1.getExtras().getString(MainActivity.USUARIO),null, true);
         TextView lblCliente = findViewById(R.id.tvNomeCliente);
-        lblCliente.setText(cliente.getNome() + "\n" + cliente.getApelidos());
+        lblCliente.setText(cliente.getNome() + "\n" + cliente.getApelidos() + "\n");
+        ImageView imaxePerfil = findViewById(R.id.ivCliente);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!temosPermiso()) {
+                ActivityCompat.requestPermissions(Cliente.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+            } else {
+                permisoGaleria=true;
+            }
+        }
+        Log.i("imaxe: ", cliente.getImaxePerfil());
+
+        if (permisoGaleria) {
+            Log.i("Permiso: ", "Si");
+            Bitmap bitmap = BitmapFactory.decodeFile(cliente.getImaxePerfil());
+            if (!(bitmap == null)) {
+                Bitmap bitmapEscalado = null;
+                switch (getResources().getDisplayMetrics().densityDpi) {
+                    case DisplayMetrics.DENSITY_LOW:
+                        bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 320, 320, false);
+                        break;
+                    case DisplayMetrics.DENSITY_MEDIUM:
+                        bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 480, 480, false);
+                        break;
+                    case DisplayMetrics.DENSITY_HIGH:
+                        bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 600, 600, false);
+                        break;
+                    case DisplayMetrics.DENSITY_XHIGH:
+                        bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 960, 960, false);
+                        break;
+                }
+                imaxePerfil.setImageBitmap(bitmap);
+            }
+        }
     }
 
+
+    private boolean temosPermiso() {
+        int result = ContextCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.READ_EXTERNAL_STORAGE);
+        return result == PackageManager.PERMISSION_GRANTED;
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+
+        if (grantResults.length>0) {
+            switch (requestCode) {
+                case 1: {
+                    permisoGaleria = true;
+                }
+            }
+        }
+    }
 
     @Override
     public void onStart(){
@@ -118,7 +183,6 @@ public class Cliente extends AppCompatActivity {
                 baseDatos = BDTendaVDF.getInstance(getApplicationContext());
                 baseDatos.abrirBD();
 
-                buscarDatosCliente();
 
             }
             catch (Exception erro) {
@@ -127,8 +191,10 @@ public class Cliente extends AppCompatActivity {
                 finish();
             }
         }
-    }
 
+        buscarDatosCliente();
+    }
+/*
     @Override
     public void onStop(){
         super.onStop();
@@ -138,7 +204,7 @@ public class Cliente extends AppCompatActivity {
             baseDatos.pecharBD();
             baseDatos=null;
         }
-    }
+    }*/
 
 
     @Override

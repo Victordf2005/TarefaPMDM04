@@ -1,16 +1,27 @@
-package tenda.tarefa03;
+package tenda.tarefa04;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import BaseDatos.BDTendaVDF;
 import BaseDatos.Usuario;
@@ -21,13 +32,66 @@ public class Administrador extends AppCompatActivity {
     private BDTendaVDF baseDatos;
     private Usuario usuario;
 
+    private Boolean permisoGaleria = false;
+
     private void buscarDatosAdmin() {
         Intent intent1 = getIntent();
         usuario = baseDatos.getUsuario(intent1.getExtras().getString(MainActivity.USUARIO),null, true);
         TextView lblAdmin = findViewById(R.id.tvNomeAdmin);
         lblAdmin.setText(usuario.getNome() + "\n" + usuario.getApelidos() + "\n");
+        ImageView imaxePerfil = findViewById(R.id.ivAdmin);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!temosPermiso()) {
+                ActivityCompat.requestPermissions(Administrador.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+            } else {
+                permisoGaleria=true;
+            }
+        }
+        Log.i("imaxe: ", usuario.getImaxePerfil());
+
+        if (permisoGaleria) {
+            Log.i("Permiso: ", "Si");
+            Bitmap bitmap = BitmapFactory.decodeFile(usuario.getImaxePerfil());
+            if (!(bitmap == null)) {
+                Bitmap bitmapEscalado = null;
+                switch (getResources().getDisplayMetrics().densityDpi) {
+                    case DisplayMetrics.DENSITY_LOW:
+                        bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 320, 320, false);
+                        break;
+                    case DisplayMetrics.DENSITY_MEDIUM:
+                        bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 480, 480, false);
+                        break;
+                    case DisplayMetrics.DENSITY_HIGH:
+                        bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 600, 600, false);
+                        break;
+                    case DisplayMetrics.DENSITY_XHIGH:
+                        bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 960, 960, false);
+                        break;
+                }
+                imaxePerfil.setImageBitmap(bitmap);
+            }
+        }
+
     }
 
+    private boolean temosPermiso() {
+        int result = ContextCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.READ_EXTERNAL_STORAGE);
+        return result == PackageManager.PERMISSION_GRANTED;
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+
+        if (grantResults.length>0) {
+            switch (requestCode) {
+                case 1: {
+                    permisoGaleria = true;
+                }
+            }
+        }
+    }
 
     private void xestionarEventos(){
 
@@ -68,7 +132,7 @@ public class Administrador extends AppCompatActivity {
         //crear activity e lanzala
         Intent intent = new Intent();
         intent.putExtra("Tipo", "P");
-        intent.setClassName(getApplicationContext(), "tenda.tarefa03.Administrador_VerPedidosAR");
+        intent.setClassName(getApplicationContext(), "tenda.tarefa04.Administrador_VerPedidosAR");
         startActivity(intent);
     }
 
@@ -77,7 +141,7 @@ public class Administrador extends AppCompatActivity {
         //crear activity e lanzala
         Intent intent = new Intent();
         intent.putExtra("Tipo", "A");
-        intent.setClassName(getApplicationContext(), "tenda.tarefa03.Administrador_VerPedidosVer");
+        intent.setClassName(getApplicationContext(), "tenda.tarefa04.Administrador_VerPedidosVer");
         startActivity(intent);
     }
 
@@ -86,7 +150,7 @@ public class Administrador extends AppCompatActivity {
         //crear activity e lanzala
         Intent intent = new Intent();
         intent.putExtra("Tipo", "R");
-        intent.setClassName(getApplicationContext(), "tenda.tarefa03.Administrador_VerPedidosVer");
+        intent.setClassName(getApplicationContext(), "tenda.tarefa04.Administrador_VerPedidosVer");
         startActivity(intent);
     }
 
@@ -101,8 +165,6 @@ public class Administrador extends AppCompatActivity {
                 baseDatos = BDTendaVDF.getInstance(getApplicationContext());
                 baseDatos.abrirBD();
 
-                buscarDatosAdmin();
-
             }
             catch (Exception erro) {
                 // Erro tratando de abrir a BD
@@ -110,7 +172,10 @@ public class Administrador extends AppCompatActivity {
                 finish();
             }
         }
+
+        buscarDatosAdmin();
     }
+/*
 
     @Override
     public void onStop(){
@@ -122,6 +187,7 @@ public class Administrador extends AppCompatActivity {
             baseDatos=null;
         }
     }
+*/
 
 
     @Override
@@ -163,4 +229,5 @@ public class Administrador extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
 }

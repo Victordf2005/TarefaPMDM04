@@ -1,18 +1,29 @@
-package tenda.tarefa03;
+package tenda.tarefa04;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import BaseDatos.BDTendaVDF;
@@ -21,6 +32,8 @@ import BaseDatos.BDTendaVDF;
 public class EnderezoEnvio extends AppCompatActivity {
 
     private BDTendaVDF baseDatos;
+
+    private boolean permisoGaleria = false;
 
     private void xestionarEventos(){
 
@@ -119,6 +132,65 @@ public class EnderezoEnvio extends AppCompatActivity {
         }, 4000);
     }
 
+    private void buscarDatosCliente() {
+
+        Intent intent1 = getIntent();
+        TextView lblCliente = findViewById(R.id.tvNomeCliente);
+        lblCliente.setText(intent1.getExtras().getString("nome_cliente") + "\n" + intent1.getExtras().get("apelidos_cliente"));
+        ImageView imaxePerfil = findViewById(R.id.ivCliente);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!temosPermiso()) {
+                ActivityCompat.requestPermissions(EnderezoEnvio.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+            } else {
+                permisoGaleria=true;
+            }
+        }
+        Log.i("imaxe: ", intent1.getExtras().getString("imaxePerfil"));
+
+        if (permisoGaleria) {
+            Log.i("Permiso: ", "Si");
+            Bitmap bitmap = BitmapFactory.decodeFile( intent1.getExtras().getString("imaxePerfil"));
+            if (!(bitmap == null)) {
+                Bitmap bitmapEscalado = null;
+                switch (getResources().getDisplayMetrics().densityDpi) {
+                    case DisplayMetrics.DENSITY_LOW:
+                        bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 320, 320, false);
+                        break;
+                    case DisplayMetrics.DENSITY_MEDIUM:
+                        bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 480, 480, false);
+                        break;
+                    case DisplayMetrics.DENSITY_HIGH:
+                        bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 600, 600, false);
+                        break;
+                    case DisplayMetrics.DENSITY_XHIGH:
+                        bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 960, 960, false);
+                        break;
+                }
+                imaxePerfil.setImageBitmap(bitmap);
+            }
+        }
+    }
+
+
+    private boolean temosPermiso() {
+        int result = ContextCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.READ_EXTERNAL_STORAGE);
+        return result == PackageManager.PERMISSION_GRANTED;
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+
+        if (grantResults.length>0) {
+            switch (requestCode) {
+                case 1: {
+                    permisoGaleria = true;
+                }
+            }
+        }
+    }
+
     @Override
     public void onStart(){
         super.onStart();
@@ -135,7 +207,10 @@ public class EnderezoEnvio extends AppCompatActivity {
                 finish();
             }
         }
+
+        buscarDatosCliente();
     }
+/*
 
     @Override
     public void onStop(){
@@ -147,6 +222,7 @@ public class EnderezoEnvio extends AppCompatActivity {
             baseDatos=null;
         }
     }
+*/
 
 
     @Override

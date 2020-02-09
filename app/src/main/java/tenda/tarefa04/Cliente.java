@@ -114,15 +114,13 @@ public class Cliente extends AppCompatActivity {
     private void verRealizados() {
 
         //crear activity e lanzala
-        Intent intentoPerfil = new Intent();
-        intentoPerfil.putExtra("usuario", cliente.getUsuario());
-        intentoPerfil.putExtra("nome", cliente.getNome());
-        intentoPerfil.putExtra("apelidos", cliente.getApelidos());
-        intentoPerfil.putExtra("email", cliente.getEmail());
-        intentoPerfil.putExtra("tipo", "cliente");
-        intentoPerfil.putExtra("imaxePerfil", cliente.getImaxePerfil());
-        intentoPerfil.setClassName(getApplicationContext(), "tenda.tarefa04.CambiarDatosPerfil");
-        startActivity(intentoPerfil);
+        Intent intent = new Intent();
+        intent.putExtra("id_cliente", String.valueOf(cliente.getCodigo()));
+        intent.putExtra("nome_cliente", cliente.getNome());
+        intent.putExtra("apelidos_cliente", cliente.getApelidos());
+        intent.putExtra("imaxePerfil", cliente.getImaxePerfil());
+        intent.setClassName(getApplicationContext(), "tenda.tarefa04.VerCompras");
+        startActivity(intent);
     }
 
 
@@ -130,8 +128,11 @@ public class Cliente extends AppCompatActivity {
         // crear activity e lanzala
         Intent intentoPerfil = new Intent();
         intentoPerfil.putExtra("usuario", cliente.getUsuario());
-        intentoPerfil.putExtra("imaxePerfil", cliente.getImaxePerfil());
+        intentoPerfil.putExtra("nome", cliente.getNome());
+        intentoPerfil.putExtra("apelidos", cliente.getApelidos());
+        intentoPerfil.putExtra("email", cliente.getEmail());
         intentoPerfil.putExtra("tipo", "cliente");
+        intentoPerfil.putExtra("imaxePerfil", cliente.getImaxePerfil());
         intentoPerfil.setClassName(getApplicationContext(), "tenda.tarefa04.CambiarDatosPerfil");
         startActivity(intentoPerfil);
     }
@@ -169,8 +170,11 @@ public class Cliente extends AppCompatActivity {
                     case DisplayMetrics.DENSITY_XHIGH:
                         bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 960, 960, false);
                         break;
+                    default:
+                        bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 480, 480, false);
+                        break;
                 }
-                imaxePerfil.setImageBitmap(bitmap);
+                imaxePerfil.setImageBitmap(bitmapEscalado);
             }
         }
     }

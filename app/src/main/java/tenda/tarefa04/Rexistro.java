@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -46,6 +47,51 @@ public class Rexistro extends AppCompatActivity {
     private boolean permisoCamara = false;
     private boolean permisoGaleria = false;
     private boolean permisoTarxeta = false;
+
+
+
+    // Gardar elementos seleccionados, xa que se perden cando cambia de orientación
+    @Override
+    protected void onSaveInstanceState(Bundle estado){
+        super.onSaveInstanceState(estado);
+        estado.putString("IMAXE", rutaImaxePerfil);
+    }
+
+    // Recuperar elementos seleccionados cando cambie a orientación
+    @Override
+    protected void onRestoreInstanceState(Bundle estado) {
+        super.onRestoreInstanceState(estado);
+
+        //Collemos o spinner e seleccionamos a categoría que estaba escollida e deshabilitamos os listeners
+        rutaImaxePerfil = estado.getString("IMAXE");
+
+        ImageView imaxePerfil = findViewById(R.id.ivRexistro);
+
+        Bitmap bitmap = BitmapFactory.decodeFile(estado.getString("IMAXE"));
+        if (!(bitmap == null)) {
+            Bitmap bitmapEscalado = null;
+            switch (getResources().getDisplayMetrics().densityDpi) {
+                case DisplayMetrics.DENSITY_LOW:
+                    bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 320, 320, false);
+                    break;
+                case DisplayMetrics.DENSITY_MEDIUM:
+                    bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 480, 480, false);
+                    break;
+                case DisplayMetrics.DENSITY_HIGH:
+                    bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 600, 600, false);
+                    break;
+                case DisplayMetrics.DENSITY_XHIGH:
+                    bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 960, 960, false);
+                    break;
+                default:
+                    bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 480, 480, false);
+                    break;
+            }
+            imaxePerfil.setImageBitmap(bitmapEscalado);
+        }
+
+    }
+
 
     private void xestionarEventos(){
 
@@ -187,7 +233,27 @@ public class Rexistro extends AppCompatActivity {
                     if (arquivo.exists()) {
                         rutaImaxePerfil = arquivo.getAbsolutePath();
                         Bitmap imaxe = BitmapFactory.decodeFile(arquivo.getAbsolutePath());
-                        fotoPerfil.setImageBitmap(imaxe);
+                        if (!(imaxe == null)) {
+                            Bitmap bitmapEscalado = null;
+                            switch (getResources().getDisplayMetrics().densityDpi) {
+                                case DisplayMetrics.DENSITY_LOW:
+                                    bitmapEscalado = Bitmap.createScaledBitmap(imaxe, 320, 320, false);
+                                    break;
+                                case DisplayMetrics.DENSITY_MEDIUM:
+                                    bitmapEscalado = Bitmap.createScaledBitmap(imaxe, 480, 480, false);
+                                    break;
+                                case DisplayMetrics.DENSITY_HIGH:
+                                    bitmapEscalado = Bitmap.createScaledBitmap(imaxe, 600, 600, false);
+                                    break;
+                                case DisplayMetrics.DENSITY_XHIGH:
+                                    bitmapEscalado = Bitmap.createScaledBitmap(imaxe, 960, 960, false);
+                                    break;
+                                default:
+                                    bitmapEscalado = Bitmap.createScaledBitmap(imaxe, 480, 480, false);
+                                    break;
+                            }
+                            fotoPerfil.setImageBitmap(bitmapEscalado);
+                        }
                     } else {
                         Toast.makeText(getApplicationContext(),"Erro accedendo á foto recén feita.",Toast.LENGTH_LONG).show();
                     }

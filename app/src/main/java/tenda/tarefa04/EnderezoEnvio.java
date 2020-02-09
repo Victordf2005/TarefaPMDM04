@@ -166,8 +166,11 @@ public class EnderezoEnvio extends AppCompatActivity {
                     case DisplayMetrics.DENSITY_XHIGH:
                         bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 960, 960, false);
                         break;
+                    default:
+                        bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 480, 480, false);
+                        break;
                 }
-                imaxePerfil.setImageBitmap(bitmap);
+                imaxePerfil.setImageBitmap(bitmapEscalado);
             }
         }
     }

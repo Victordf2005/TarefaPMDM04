@@ -22,6 +22,7 @@ import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -52,9 +53,54 @@ public class CambiarDatosPerfil extends AppCompatActivity {
 
     private String usuario;
 
+
+
+    // Gardar elementos seleccionados, xa que se perden cando cambia de orientación
+    @Override
+    protected void onSaveInstanceState(Bundle estado){
+        super.onSaveInstanceState(estado);
+        estado.putString("IMAXE", rutaImaxePerfil);
+    }
+
+    // Recuperar elementos seleccionados cando cambie a orientación
+    @Override
+    protected void onRestoreInstanceState(Bundle estado) {
+        super.onRestoreInstanceState(estado);
+
+        //Collemos o spinner e seleccionamos a categoría que estaba escollida e deshabilitamos os listeners
+        rutaImaxePerfil = estado.getString("IMAXE");
+
+        ImageView imaxePerfil = findViewById(R.id.ivRexistroCambioPerfil);
+
+        Bitmap bitmap = BitmapFactory.decodeFile(estado.getString("IMAXE"));
+        if (!(bitmap == null)) {
+            Bitmap bitmapEscalado = null;
+            switch (getResources().getDisplayMetrics().densityDpi) {
+                case DisplayMetrics.DENSITY_LOW:
+                    bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 320, 320, false);
+                    break;
+                case DisplayMetrics.DENSITY_MEDIUM:
+                    bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 480, 480, false);
+                    break;
+                case DisplayMetrics.DENSITY_HIGH:
+                    bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 600, 600, false);
+                    break;
+                case DisplayMetrics.DENSITY_XHIGH:
+                    bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 960, 960, false);
+                    break;
+                default:
+                    bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 480, 480, false);
+                    break;
+            }
+            imaxePerfil.setImageBitmap(bitmapEscalado);
+        }
+
+    }
+
+
     private void xestionarEventos(){
 
-        // Botón para rexistrarse
+        // Botón para gravar datos
         Button btGravar = findViewById(R.id.btRexistrar);
         btGravar.setOnClickListener(new View.OnClickListener() {
 
@@ -64,6 +110,7 @@ public class CambiarDatosPerfil extends AppCompatActivity {
             }
 
         });
+
 
     }
 
@@ -79,6 +126,8 @@ public class CambiarDatosPerfil extends AppCompatActivity {
         EditText nome = findViewById(R.id.etNomeCambioPerfil);
         nome.setText(pantallaAnterior.getExtras().getString("nome"));
 
+        Log.i("Nome cliente ", pantallaAnterior.getExtras().getString("nome"));
+
         EditText apelidos = findViewById(R.id.etApelidosCambioPerfil);
         apelidos.setText(pantallaAnterior.getExtras().getString("apelidos"));
 
@@ -91,6 +140,7 @@ public class CambiarDatosPerfil extends AppCompatActivity {
                 ActivityCompat.requestPermissions(CambiarDatosPerfil.this, new String[]{Manifest.permission.CAMERA}, 1);
             } else {
                 permisoCamara = true;
+                xestionarCamara();
             }
             if (!temosPermiso(2)) {
                 ActivityCompat.requestPermissions(CambiarDatosPerfil.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 2);
@@ -122,8 +172,11 @@ public class CambiarDatosPerfil extends AppCompatActivity {
                     case DisplayMetrics.DENSITY_XHIGH:
                         bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 960, 960, false);
                         break;
+                    default:
+                        bitmapEscalado = Bitmap.createScaledBitmap(bitmap, 480, 480, false);
+                        break;
                 }
-                imaxePerfil.setImageBitmap(bitmap);
+                imaxePerfil.setImageBitmap(bitmapEscalado);
             }
         }
     }
@@ -176,7 +229,7 @@ public class CambiarDatosPerfil extends AppCompatActivity {
 
     private void xestionarCamara() {
 
-        ImageView fotoPerfil = findViewById(R.id.ivRexistro);
+        ImageView fotoPerfil = findViewById(R.id.ivRexistroCambioPerfil);
         fotoPerfil.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -251,9 +304,10 @@ public class CambiarDatosPerfil extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
 
             File ruta, arquivo;
-            ImageView fotoPerfil = findViewById(R.id.ivRexistro);
+            ImageView fotoPerfil = findViewById(R.id.ivRexistroCambioPerfil);
 
             switch (requestCode) {
+
                 case FOTO_NOVA:
                     ruta = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
                     arquivo = new File(ruta, nomeFoto);
@@ -265,6 +319,7 @@ public class CambiarDatosPerfil extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),"Erro accedendo á foto recén feita.",Toast.LENGTH_LONG).show();
                     }
                     break;
+
                 case FOTO_GALERIA:
                     Uri ruta2 = data.getData();
                     fotoPerfil.setImageURI(ruta2);
@@ -292,21 +347,19 @@ public class CambiarDatosPerfil extends AppCompatActivity {
     private void gravarDatos() {
 
         if (datosCorrectos()){
-            // Podemos rexistrar o novo usuario, recollemos o resto de datos do layout
-            Spinner spnTipoUsuario = findViewById(R.id.spnTipo);
-            String tipo = spnTipoUsuario.getSelectedItem().toString().substring(0, 1);   // O código de tipo é a primeira letra
+            // Podemos modificar os datos do usuario
 
-            Long resultado = baseDatos.actualizarUsuario(((EditText) findViewById(R.id.etNome)).getText().toString(),
-                    ((EditText) findViewById(R.id.etApelidos)).getText().toString(),
-                    ((EditText) findViewById(R.id.etEmail)).getText().toString(),
+            Long resultado = baseDatos.actualizarUsuario(((EditText) findViewById(R.id.etNomeCambioPerfil)).getText().toString(),
+                    ((EditText) findViewById(R.id.etApelidosCambioPerfil)).getText().toString(),
+                    ((EditText) findViewById(R.id.etEmailCambioPerfil)).getText().toString(),
                     usuario,
-                    ((EditText) findViewById(R.id.etContrasinalRexistro)).getText().toString(),
+                    ((EditText) findViewById(R.id.etContrasinal1RexistroCambioPerfil)).getText().toString(),
                     rutaImaxePerfil);
 
             if (resultado > 0) {
 
                 // Datos gravados correctamente
-                Toast.makeText(getApplicationContext(), "Datos gravados correctamewnte; código: " + resultado, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Datos modificados correctamente.", Toast.LENGTH_LONG).show();
 
                 // Esperar unos segundos a pechar a activity para permitir ver a mensaxe Toast
                 Handler h = new Handler();
@@ -319,7 +372,7 @@ public class CambiarDatosPerfil extends AppCompatActivity {
             } else {
 
                 // Houbo algún erro
-                Toast.makeText(getApplicationContext(), "Produciuse algún erro. Os datos NON FORON GRAVADOS.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Produciuse algún erro. Os datos NON FORON MODIFICADOS.", Toast.LENGTH_LONG).show();
 
             }
         }
@@ -328,16 +381,14 @@ public class CambiarDatosPerfil extends AppCompatActivity {
     private boolean datosCorrectos() {
 
         String erros = "";
-        EditText etUsuario = findViewById(R.id.etUsuarioRexistro);
-        String usuario = etUsuario.getText().toString();
 
-        if (((EditText) findViewById(R.id.etNome)).getText().toString().trim().equals("")) {
+        if (((EditText) findViewById(R.id.etNomeCambioPerfil)).getText().toString().trim().equals("")) {
             erros += "\nDebe indicar o nome.";
         }
-        if (((EditText) findViewById(R.id.etApelidos)).getText().toString().trim().equals("")) {
+        if (((EditText) findViewById(R.id.etApelidosCambioPerfil)).getText().toString().trim().equals("")) {
             erros += "\nDebe indicar os apelidos.";
         }
-        if (((EditText) findViewById(R.id.etEmail)).getText().toString().trim().equals("")) {
+        if (((EditText) findViewById(R.id.etEmailCambioPerfil)).getText().toString().trim().equals("")) {
             erros += "\nDebe indicar o email.";
         }
         if (((EditText) findViewById(R.id.etContrasinal1RexistroCambioPerfil)).getText().toString().trim().equals("")) {
@@ -394,7 +445,6 @@ public class CambiarDatosPerfil extends AppCompatActivity {
         super.onStart();
 
         abrirBaseDatos();
-        amosarDatosUsuario();
     }
 /*
     @Override
@@ -414,5 +464,6 @@ public class CambiarDatosPerfil extends AppCompatActivity {
         setContentView(R.layout.activity_cambiar_datos_perfil);
 
         xestionarEventos();
+        amosarDatosUsuario();
     }
 }

@@ -125,6 +125,25 @@ public class Administrador extends AppCompatActivity {
             }
         });
 
+        // Botón Sair
+        Button btnSair = findViewById(R.id.btSair);
+        btnSair.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // Destruir a activity;
+                finish();
+            }
+        });
+
+        // Botón para modificar datos de perfil
+        Button btnCambiarDatos = findViewById(R.id.btCambiarDatos);
+        btnCambiarDatos.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                cambiarDatosPerfil();
+            }
+        });
     }
 
     private void verEnTramite() {
@@ -154,6 +173,18 @@ public class Administrador extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private void cambiarDatosPerfil() {
+        // crear activity e lanzala
+        Intent intentoPerfil = new Intent();
+        intentoPerfil.putExtra("usuario", usuario.getUsuario());
+        intentoPerfil.putExtra("nome", usuario.getNome());
+        intentoPerfil.putExtra("apelidos", usuario.getApelidos());
+        intentoPerfil.putExtra("email", usuario.getEmail());
+        intentoPerfil.putExtra("tipo", "administrador");
+        intentoPerfil.putExtra("imaxePerfil", usuario.getImaxePerfil());
+        intentoPerfil.setClassName(getApplicationContext(), "tenda.tarefa04.CambiarDatosPerfil");
+        startActivity(intentoPerfil);
+    }
 
     @Override
     public void onStart(){

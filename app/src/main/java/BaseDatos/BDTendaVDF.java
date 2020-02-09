@@ -77,6 +77,26 @@ public class BDTendaVDF  extends SQLiteOpenHelper {
         return codigo;
     }
 
+    // Método para engadir un novo usuario
+    public long actualizarUsuario(String nome, String apelidos, String email, String usuario, String contrasinal, String imaxePerfil) {
+
+        // creamos o rexistro
+        ContentValues rexistro = new ContentValues();
+
+        // engadimos valores ás columnas
+        rexistro.put("us_nome", nome);
+        rexistro.put("us_apelidos", apelidos);
+        rexistro.put("us_email", email);
+        rexistro.put("us_contrasinal", contrasinal);
+        rexistro.put("us_imaxe", imaxePerfil);
+
+        String condicionWhere = "us_usuario=?";
+        String[] parametros = new String[]{usuario};
+
+        int rexistrosafectados = sqlLiteDB.update(TABOA_USUARIOS,rexistro,condicionWhere,parametros);
+
+        return rexistrosafectados;
+    }
     // Método para devolver un obxecto usuario se existe.
     // Se o usuario non existe, devolve null
     public Usuario getUsuario (String usuario, String contrasinal, Boolean soUsuario) {

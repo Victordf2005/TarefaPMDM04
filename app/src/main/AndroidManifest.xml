@@ -3,50 +3,53 @@
     package="tenda.tarefa04">
 
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
-        android:requestLegacyExternalStorage="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-
         <activity
-            android:name="tenda.tarefa04.Administrador_VerPedidosVer"
+            android:name=".CambiarDatosPerfil"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name="tenda.tarefa04.Administrador_VerPedidosAR"
-            android:screenOrientation="fullSensor"/>
-        <activity
-            android:name="tenda.tarefa04.Rexistro"
+            android:name=".Administrador_VerPedidosVer"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name="tenda.tarefa04.VerCompras"
+            android:name=".Administrador_VerPedidosAR"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name="tenda.tarefa04.VerPedidos"
+            android:name=".Rexistro"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name="tenda.tarefa04.EnderezoEnvio"
+            android:name=".VerCompras"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name="tenda.tarefa04.FacerPedido"
+            android:name=".VerPedidos"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name="tenda.tarefa04.Cliente"
+            android:name=".EnderezoEnvio"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name="tenda.tarefa04.Administrador"
+            android:name=".FacerPedido"
             android:screenOrientation="fullSensor" />
         <activity
-            android:name="tenda.tarefa04.MainActivity"
+            android:name=".Cliente"
+            android:screenOrientation="fullSensor" />
+        <activity
+            android:name=".Administrador"
+            android:screenOrientation="fullSensor" />
+        <activity
+            android:name=".MainActivity"
             android:screenOrientation="fullSensor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -64,7 +67,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-
     </application>
 
 </manifest>

@@ -65,6 +65,15 @@ public class Cliente extends AppCompatActivity {
         });
 
 
+        // Botón para modificar datos de perfil
+        Button btnCambiarDatos = findViewById(R.id.btCambiarDatos);
+        btnCambiarDatos.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                cambiarDatosPerfil();
+            }
+        });
+
         // Botón Sair
         Button btnSair = findViewById(R.id.btSair);
         btnSair.setOnClickListener(new View.OnClickListener() {
@@ -105,15 +114,27 @@ public class Cliente extends AppCompatActivity {
     private void verRealizados() {
 
         //crear activity e lanzala
-        Intent intent = new Intent();
-        intent.putExtra("id_cliente", String.valueOf(cliente.getCodigo()));
-        intent.putExtra("nome_cliente", cliente.getNome());
-        intent.putExtra("apelidos_cliente", cliente.getApelidos());
-        intent.putExtra("imaxePerfil", cliente.getImaxePerfil());
-        intent.setClassName(getApplicationContext(), "tenda.tarefa04.VerCompras");
-        startActivity(intent);
+        Intent intentoPerfil = new Intent();
+        intentoPerfil.putExtra("usuario", cliente.getUsuario());
+        intentoPerfil.putExtra("nome", cliente.getNome());
+        intentoPerfil.putExtra("apelidos", cliente.getApelidos());
+        intentoPerfil.putExtra("email", cliente.getEmail());
+        intentoPerfil.putExtra("tipo", "cliente");
+        intentoPerfil.putExtra("imaxePerfil", cliente.getImaxePerfil());
+        intentoPerfil.setClassName(getApplicationContext(), "tenda.tarefa04.CambiarDatosPerfil");
+        startActivity(intentoPerfil);
     }
 
+
+    private void cambiarDatosPerfil() {
+        // crear activity e lanzala
+        Intent intentoPerfil = new Intent();
+        intentoPerfil.putExtra("usuario", cliente.getUsuario());
+        intentoPerfil.putExtra("imaxePerfil", cliente.getImaxePerfil());
+        intentoPerfil.putExtra("tipo", "cliente");
+        intentoPerfil.setClassName(getApplicationContext(), "tenda.tarefa04.CambiarDatosPerfil");
+        startActivity(intentoPerfil);
+    }
     private void buscarDatosCliente() {
         Intent intent1 = getIntent();
         cliente = baseDatos.getUsuario(intent1.getExtras().getString(MainActivity.USUARIO),null, true);

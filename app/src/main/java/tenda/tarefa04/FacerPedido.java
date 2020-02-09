@@ -276,12 +276,12 @@ public class FacerPedido extends AppCompatActivity {
         ImageView imaxePerfil = findViewById(R.id.ivCliente);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        if (!temosPermiso()) {
-            ActivityCompat.requestPermissions(FacerPedido.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-        } else {
-            permisoGaleria=true;
+            if (!temosPermiso()) {
+                ActivityCompat.requestPermissions(FacerPedido.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+            } else {
+                permisoGaleria=true;
+            }
         }
-    }
         Log.i("imaxe: ", intent1.getExtras().getString("imaxePerfil"));
 
         if (permisoGaleria) {

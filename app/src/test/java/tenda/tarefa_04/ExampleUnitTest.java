@@ -1,4 +1,4 @@
-package tenda.tarefa_03;
+package tenda.tarefa_04;
 
 import org.junit.Test;
 
